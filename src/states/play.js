@@ -225,6 +225,9 @@ define([
                             self.playerExits();
                         }
                         break;
+                    case Phaser.Gamepad.XBOX360_LEFT_BUMPER:
+                        player.dash();
+                        break;
 
                     default:
                         break;

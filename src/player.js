@@ -26,9 +26,14 @@ define([
 
         // Initialize public properites.
         // Fastest possible movement speeds.
-        this.body.maxVelocity.x = 500;
-        this.body.maxVelocity.y = 10000;
-        this.body.drag.x = 1500;
+        this.maxMoveSpeed = new Phaser.Point(250, 10000);
+        this.body.maxVelocity.x = this.maxMoveSpeed.x;
+        this.body.maxVelocity.y = this.maxMoveSpeed.y;
+        
+        // Drag
+        this.DRAG_GROUND = 1500;
+        this.DRAG_AIR = 400;
+        this.body.drag.x = this.DRAG_GROUND;
         this.body.drag.y = 0;
         
         // Is player currently jumping?
@@ -38,6 +43,14 @@ define([
         // The maximum length of time that the upward movement of the player's
         // normal jump will take.
         this.maxJumpTime = 250;
+        
+        // Is player currently dashing?
+        this.isDashing = false;
+        // Initial dash speed
+        this.dashSpeed = 500;
+        // The maximum length of time that the player can dash.
+        this.maxDashTime = 150;
+        
         // The horizontal acceleration that is applied when moving.
         this.moveAccel = 800;
 
@@ -51,10 +64,15 @@ define([
             new Bow(game, 4, 4),
             new ClawArm(game, 0, 0)
         ];
-
+        
         for(var i=0; i<this.weapons.length; i++) {
             this.addChild(this.weapons[i]);
+            //this.weapons[i].kill();
+            //this.weapons[i].reset(4, 4);
         }
+        console.log(this.weapons[1].x, this.weapons[1].y);
+        //this.weapons[1].reset(this.weapons[1].x, this.weapons[1].y);
+        this.weapons[1].reset(4, 4);
 
         // Invulnerability
         this.invulnerable = false;
@@ -63,7 +81,6 @@ define([
         // Knockback
         this.knockback = new Phaser.Point();
         this.knockbackTimeout = game.time.now;
-        this.maxMoveSpeed = new Phaser.Point(300, 10000);
 
         // Signals
         this.events.onHeal = new Phaser.Signal();
@@ -97,6 +114,26 @@ define([
         }
         if(this.isJumping) {
             this.body.velocity.y = -this.jumpSpeed;
+        }
+        
+        if (this.body.onFloor() || this.body.touching.down) {
+            this.body.drag.x = this.DRAG_GROUND;
+        }
+        else {
+            this.body.drag.x = this.DRAG_AIR;
+        }
+        
+        if(game.time.now > this.dashTimer) {
+            this.isDashing = false;
+            if (this.body.maxVelocity.x > this.maxMoveSpeed.x) {
+                this.stopMoving();
+                this.body.maxVelocity.x = Math.abs(this.body.velocity.x);
+                if (this.body.maxVelocity.x < this.maxMoveSpeed.x) this.body.maxVelocity.x = this.maxMoveSpeed.x;
+            }
+        }
+        if(this.isDashing) {
+            this.body.maxVelocity.x = this.dashSpeed;
+            this.body.velocity.x = this.dashSpeed * this.scale.x; // scale.x is 1 for right, -1 for left
         }
 
         // Update weapons.
@@ -190,11 +227,54 @@ define([
         this.isJumping = false;
     };
 
+    Player.prototype.dash = function (direction) {
+
+        // Temporarily disable input after knockback.
+        if(this.knockbackTimeout > game.time.now) return;
+        
+        // Don't dash while dashing.
+        if (this.isDashing) return;
+        
+        // Only dsah while on the ground.
+        if (!this.body.onFloor() && !this.body.touching.down) return;
+        
+        // Don't dash unless maxVelocity is regular.
+        if (this.body.maxVelocity.x > this.maxMoveSpeed.x) return;
+        
+        // Apply direction.
+        if (direction) this.facing = direction;
+        
+        // Dash
+        this.isDashing = true;
+        this.dashTimer = game.time.now + this.maxDashTime;
+        
+    };
+    
+    Player.prototype.setDirection = function (direction) {
+        this.facing = direction;
+        if (direction === 'right') {
+            this.scale.x = 1;
+        }
+        else {
+            this.scale.x = -1;
+        }
+    };
+    
     Player.prototype.moveLeft = function () {
         // Temporarily disable input after knockback.
         if(this.knockbackTimeout > game.time.now) return;
+        
+        if (this.facing === 'right' && this.isDashing) {
+            this.isDashing = false;
+        }
 
-        if(this.body.velocity.x <=  -this.maxMoveSpeed.x) this.body.velocity.x = -this.maxMoveSpeed.x;
+        this.setDirection('left');
+        
+        if (this.body.velocity.x < this.maxMoveSpeed.x * this.scale) {
+            return;
+        }
+        
+        this.body.acceleration.x = this.moveAccel * this.scale.x;
         
         // Face away from wall and slide down wall slowly if...
         // - We're falling (i.e. y velocity is a positive value)
@@ -208,25 +288,26 @@ define([
         }
         // Face normally and fall normally.
         else {
-            this.facing = 'left';
         }
         
-        // Wait for drag to stop us if switching directions.
-        if (this.body.acceleration.x > 0 && this.body.touching.bottom) {
-            this.body.acceleration.x *= -1;
-        }
-        if (this.body.velocity.x <= 0 && this.body.touching.bottom) {
-            this.body.acceleration.x = -this.moveAccel;
-        } else {
-            this.body.acceleration.x = -this.moveAccel;
-        }
+        
     };
 
     Player.prototype.moveRight = function () {
         // Temporarily disable input after knockback.
         if(this.knockbackTimeout > game.time.now) return;
+        
+        if (this.facing === 'left' && this.isDashing) {
+            this.isDashing = false;
+        }
 
-        if(this.body.velocity.x >=  this.maxMoveSpeed.x) this.body.velocity.x = this.maxMoveSpeed.x;
+        this.setDirection('right');
+        
+        if (this.body.velocity.x < this.maxMoveSpeed.x * this.scale) {
+            return;
+        }
+        
+        this.body.acceleration.x = this.moveAccel * this.scale.x;
 
         // Face away from wall and slide down wall slowly if...
         // - We're falling (i.e. y velocity is a positive value)
@@ -240,18 +321,8 @@ define([
         }
         // Face normally and fall normally.
         else {
-            this.facing = 'right';
         }
         
-        // Wait for drag to stop us if switching directions.
-        if (this.body.acceleration.x < 0 && this.body.touching.bottom) {
-            this.body.acceleration.x *= -1;
-        }
-        if (this.body.velocity.x >= 0 && this.body.touching.bottom) {
-            this.body.acceleration.x = this.moveAccel;
-        } else {
-            this.body.acceleration.x = this.moveAccel;
-        }
     };
 
     Player.prototype.stopMoving = function () {
