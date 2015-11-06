@@ -19,7 +19,7 @@ define([
     'use strict';
 
     // Shortcuts
-    var game, moveKeys, pad1, player, spawners, enemies, villagers, characters, map, collisionLayer, platforms, characterTriggers, exitDoor, healthDisplay, collectables, level;
+    var game, moveKeys, pad1, player, spawners, enemies, villagers, characters, map, collisionLayer, platforms, characterTriggers, exitDoor, healthDisplay, collectables, level, sounds;
 
     // Helper functions 
 
@@ -242,7 +242,20 @@ define([
             
             // Camera
             game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER);
-
+            
+            // Aucio
+            sounds = [
+                game.add.audio('clearing-minds')
+            ];
+            
+            //  Being mp3 files these take time to decode, so we can't play them instantly
+            //  Using setDecodedCallback we can be notified when they're ALL ready for use.
+            //  The audio files could decode in ANY order, we can never be sure which it'll be.
+            game.sound.setDecodedCallback(sounds, self.startLoopSound, self);
+        },
+        
+        startLoopSound: function(sound) {
+            sounds[0].loopFull(0.6);
         },
 
         /*

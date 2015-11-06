@@ -85,6 +85,9 @@ define([
             // Can be used for anything that doesn't need a sprite sheet.
             // Workaround for issue: https://github.com/photonstorm/phaser/issues/2173
             this.game.load.image('blank', 'assets/blank.png');
+            
+            // Audio
+            this.game.load.audio('clearing-minds', 'assets/audio/music/clearing-minds.mp3');
         },
         
         create: function() {
