@@ -273,7 +273,7 @@ define([
                     game.scale.startFullScreen();
                 }
             });
-            game.input.keyboard.addKey(Phaser.Keyboard.SPACE).onDown.add(function () {
+            game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(function () {
                 // Direct input to player if not paused.
                 if (!player.paused) {
                     // Check to see if player has reached the exit door.
