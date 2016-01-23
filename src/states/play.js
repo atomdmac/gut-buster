@@ -27,7 +27,7 @@ define([
     'use strict';
     
     // Shortcuts
-    var game, playState, moveKeys, attackKeys, pad1, player, pauseMenu, spawners, enemies, characters, map, collisionLayer, platforms, characterTriggers, exitDoor, healthDisplay, stomachMeter, damageDisplay, livesDisplay, collectables, checkpoints, level;
+    var game, playState, moveKeys, attackKeys, pad1, player, pauseMenu, spawners, enemies, characters, map, collisionLayer, platforms, characterTriggers, enterDoor, exitDoor, healthDisplay, stomachMeter, damageDisplay, livesDisplay, collectables, checkpoints, level;
 
     // Default starting properties/state of the game world. These properties
     // can be overridden by passing a data object to the Play state.
@@ -122,7 +122,10 @@ define([
             // Make the collision layer globally accessiable via 'game'.
             game.collisionLayer = collisionLayer;
 
-            // Create win trigger
+            // Create enter/exit doors.
+            enterDoor = ObjectLayerHelper.createObjectByName(game, 'door_enter', map, 'triggers');
+            game.add.existing(enterDoor);
+
             exitDoor = ObjectLayerHelper.createObjectByName(game, 'door_exit', map, 'triggers');
             game.physics.enable(exitDoor);
             exitDoor.body.allowGravity = false;

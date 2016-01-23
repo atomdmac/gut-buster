@@ -69,7 +69,7 @@ define([
             this.game.load.atlas('stomach-meter', 'assets/hud/stomach-meter.png', 'assets/hud/stomach-meter.json');
             this.game.load.image('lives', 'assets/hud/lives.png');
 
-            this.game.load.spritesheet('porta-potty', 'assets/sprites/porta-potty.png', 64, 64, 1);
+            this.game.load.spritesheet('porta-potty', 'assets/sprites/porta-potty.png', 64, 64, 2);
             this.game.load.atlas('player', 'assets/sprites/blobman.png', 'assets/sprites/blobman.json');
             this.game.load.spritesheet('spawner', 'assets/sprites/spawner.png', 32, 32, 1);
             this.game.load.spritesheet('enemy', 'assets/sprites/enemy.png', 33, 27, 1);

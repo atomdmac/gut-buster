@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="32" tileheight="32" nextobjectid="51">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="32" tileheight="32" nextobjectid="52">
  <tileset firstgid="1" name="Sci-Fi-Tiles_A4" tilewidth="32" tileheight="32">
   <image source="../tilesets/Sci-Fi-Tiles_A4.png" width="512" height="480"/>
  </tileset>
@@ -198,8 +198,16 @@
 </data>
  </layer>
  <objectgroup name="triggers">
-  <object id="1" name="door_exit" type="door" x="192" y="512" width="64" height="64">
+  <object id="1" name="door_exit" type="door" x="224" y="512" width="64" height="64">
    <properties>
+    <property name="frame" value="0"/>
+    <property name="key" value="porta-potty"/>
+    <property name="mapLink" value="Map3"/>
+   </properties>
+  </object>
+  <object id="51" name="door_enter" type="door" x="64" y="512" width="64" height="64">
+   <properties>
+    <property name="frame" value="1"/>
     <property name="key" value="porta-potty"/>
     <property name="mapLink" value="Map3"/>
    </properties>
@@ -232,7 +240,7 @@
   </object>
  </objectgroup>
  <objectgroup name="spawns">
-  <object id="6" name="player_spawn" type="spawn" x="128" y="416" width="32" height="32"/>
+  <object id="6" name="player_spawn" type="spawn" x="128" y="544" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="collectables">
   <object id="7" name="health-powerup-1" type="health-powerup" x="1984" y="672" width="32" height="32"/>

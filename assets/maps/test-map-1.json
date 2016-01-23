@@ -66,6 +66,7 @@
                  "name":"door_exit",
                  "properties":
                     {
+                     "frame":"0",
                      "key":"porta-potty",
                      "mapLink":"Map3"
                     },
@@ -73,7 +74,24 @@
                  "type":"door",
                  "visible":true,
                  "width":64,
-                 "x":192,
+                 "x":224,
+                 "y":512
+                }, 
+                {
+                 "height":64,
+                 "id":51,
+                 "name":"door_enter",
+                 "properties":
+                    {
+                     "frame":"1",
+                     "key":"porta-potty",
+                     "mapLink":"Map3"
+                    },
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":64,
+                 "x":64,
                  "y":512
                 }],
          "opacity":1,
@@ -177,7 +195,7 @@
                  "visible":true,
                  "width":32,
                  "x":128,
-                 "y":416
+                 "y":544
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -918,7 +936,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":51,
+ "nextobjectid":52,
  "orientation":"orthogonal",
  "properties":
     {
