@@ -122,11 +122,19 @@ define([
             // Make the collision layer globally accessiable via 'game'.
             game.collisionLayer = collisionLayer;
 
+            // Create win trigger
+            exitDoor = ObjectLayerHelper.createObjectByName(game, 'door_exit', map, 'triggers');
+            game.physics.enable(exitDoor);
+            exitDoor.body.allowGravity = false;
+            exitDoor.body.immovable = true;
+            game.add.existing(exitDoor);
+
             // Insert Commander Kavosic
             characters = ObjectLayerHelper.createObjectsByType(game, 'commander-kavosic', map, 'characters', CommanderKavosic);
             //characters.forEach(this.registerEnemyEvents, this);
             game.add.existing(characters);
             
+
             // Spawn point
             var spawnPoint = ObjectLayerHelper.createObjectByName(game, 'player_spawn', map, 'spawns');
 
@@ -175,12 +183,6 @@ define([
             characterTriggers = ObjectLayerHelper.createObjectsByType(game, 'character-trigger', map, 'triggers', CharacterTrigger);
             game.add.existing(characterTriggers);
 
-            // Create win trigger
-            exitDoor = ObjectLayerHelper.createObjectByName(game, 'door_exit', map, 'triggers');
-            game.physics.enable(exitDoor);
-            exitDoor.body.allowGravity = false;
-            exitDoor.body.immovable = true;
-            game.add.existing(exitDoor);
 
             // Platforms
             platforms = new GameGroup(game);

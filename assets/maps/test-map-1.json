@@ -56,22 +56,25 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":0,
          "name":"triggers",
          "objects":[
                 {
-                 "height":32,
+                 "height":64,
+                 "id":1,
                  "name":"door_exit",
                  "properties":
                     {
-                     "key":"",
+                     "key":"porta-potty",
                      "mapLink":"Map3"
                     },
+                 "rotation":0,
                  "type":"door",
                  "visible":true,
-                 "width":32,
-                 "x":6592,
-                 "y":160
+                 "width":64,
+                 "x":192,
+                 "y":512
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -81,17 +84,20 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":0,
          "name":"platforms",
          "objects":[
                 {
                  "height":16,
+                 "id":2,
                  "name":"platform-1",
                  "properties":
                     {
                      "key":"platform",
                      "wayPoints":"[[1824, 224],[1824, 776]]"
                     },
+                 "rotation":0,
                  "type":"platform",
                  "visible":true,
                  "width":64,
@@ -100,12 +106,14 @@
                 }, 
                 {
                  "height":16,
+                 "id":3,
                  "name":"platform-3",
                  "properties":
                     {
                      "key":"platform",
                      "wayPoints":"[[2144, 224],[2656, 128],[2656, 192],[2144,288]]"
                     },
+                 "rotation":0,
                  "type":"platform",
                  "visible":true,
                  "width":96,
@@ -114,12 +122,14 @@
                 }, 
                 {
                  "height":16,
+                 "id":4,
                  "name":"platform-2",
                  "properties":
                     {
                      "key":"platform",
                      "wayPoints":"[[2656, 128],[2656, 192],[2144,288], [2144, 224]]"
                     },
+                 "rotation":0,
                  "type":"platform",
                  "visible":true,
                  "width":96,
@@ -128,12 +138,14 @@
                 }, 
                 {
                  "height":16,
+                 "id":5,
                  "name":"platform-4",
                  "properties":
                     {
                      "key":"platform",
                      "wayPoints":"[[4960,448],[5376,448]]"
                     },
+                 "rotation":0,
                  "type":"platform",
                  "visible":true,
                  "width":96,
@@ -148,16 +160,19 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":0,
          "name":"spawns",
          "objects":[
                 {
                  "height":32,
+                 "id":6,
                  "name":"player_spawn",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"spawn",
                  "visible":true,
                  "width":32,
@@ -172,16 +187,19 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":0,
          "name":"collectables",
          "objects":[
                 {
                  "height":32,
+                 "id":7,
                  "name":"health-powerup-1",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"health-powerup",
                  "visible":true,
                  "width":32,
@@ -190,11 +208,13 @@
                 }, 
                 {
                  "height":32,
+                 "id":8,
                  "name":"health-powerup-1",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"health-powerup",
                  "visible":true,
                  "width":32,
@@ -203,11 +223,13 @@
                 }, 
                 {
                  "height":32,
+                 "id":9,
                  "name":"health-powerup-1",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"health-powerup",
                  "visible":true,
                  "width":32,
@@ -216,11 +238,13 @@
                 }, 
                 {
                  "height":32,
+                 "id":10,
                  "name":"health-powerup-1",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"health-powerup",
                  "visible":true,
                  "width":32,
@@ -229,11 +253,13 @@
                 }, 
                 {
                  "height":32,
+                 "id":11,
                  "name":"health-powerup-1",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"health-powerup",
                  "visible":true,
                  "width":32,
@@ -242,11 +268,13 @@
                 }, 
                 {
                  "height":32,
+                 "id":12,
                  "name":"food-powerup-1",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"food-powerup",
                  "visible":true,
                  "width":32,
@@ -255,11 +283,13 @@
                 }, 
                 {
                  "height":32,
+                 "id":13,
                  "name":"food-powerup-1",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"food-powerup",
                  "visible":true,
                  "width":32,
@@ -268,11 +298,13 @@
                 }, 
                 {
                  "height":32,
+                 "id":14,
                  "name":"food-powerup-1",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"food-powerup",
                  "visible":true,
                  "width":32,
@@ -281,11 +313,13 @@
                 }, 
                 {
                  "height":32,
+                 "id":15,
                  "name":"food-powerup-1",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"food-powerup",
                  "visible":true,
                  "width":32,
@@ -294,11 +328,13 @@
                 }, 
                 {
                  "height":32,
+                 "id":16,
                  "name":"food-powerup-1",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"food-powerup",
                  "visible":true,
                  "width":32,
@@ -313,6 +349,7 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":0,
          "name":"villagers",
          "objects":[],
@@ -324,6 +361,7 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":0,
          "name":"characters",
          "objects":[],
@@ -335,16 +373,19 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":0,
          "name":"spawners",
          "objects":[
                 {
                  "height":24,
+                 "id":17,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -353,11 +394,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":18,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"dipteranura"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -366,11 +409,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":19,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -379,11 +424,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":20,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -392,11 +439,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":21,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -405,11 +454,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":22,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -418,11 +469,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":23,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -431,11 +484,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":24,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -444,11 +499,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":25,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -457,11 +514,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":26,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -470,11 +529,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":27,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -483,11 +544,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":28,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -496,11 +559,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":29,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -509,11 +574,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":30,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -522,11 +589,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":31,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -535,11 +604,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":32,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -548,11 +619,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":33,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -561,11 +634,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":34,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -574,11 +649,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":35,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -587,11 +664,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":36,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -600,11 +679,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":37,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -613,11 +694,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":38,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -626,11 +709,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":39,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -639,11 +724,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":40,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -652,11 +739,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":41,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -665,11 +754,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":42,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -678,11 +769,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":43,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -691,11 +784,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":44,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"cthulbat"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -704,11 +799,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":45,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"worm"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -717,11 +814,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":46,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"dipteranura"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -730,11 +829,13 @@
                 }, 
                 {
                  "height":24,
+                 "id":47,
                  "name":"spawner-1",
                  "properties":
                     {
                      "key":"dipteranura"
                     },
+                 "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":24,
@@ -749,16 +850,19 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":0,
          "name":"checkpoints",
          "objects":[
                 {
                  "height":96,
+                 "id":48,
                  "name":"",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"checkpoint",
                  "visible":true,
                  "width":32,
@@ -767,11 +871,13 @@
                 }, 
                 {
                  "height":192,
+                 "id":49,
                  "name":"",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"checkpoint",
                  "visible":true,
                  "width":32,
@@ -780,11 +886,13 @@
                 }, 
                 {
                  "height":224,
+                 "id":50,
                  "name":"",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"checkpoint",
                  "visible":true,
                  "width":32,
@@ -799,6 +907,7 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":0,
          "name":"Object Layer 9",
          "objects":[],
@@ -809,11 +918,13 @@
          "x":0,
          "y":0
         }],
+ "nextobjectid":51,
  "orientation":"orthogonal",
  "properties":
     {
 
     },
+ "renderorder":"right-down",
  "tileheight":32,
  "tilesets":[
         {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="240" height="30" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="32" tileheight="32" nextobjectid="51">
  <tileset firstgid="1" name="Sci-Fi-Tiles_A4" tilewidth="32" tileheight="32">
   <image source="../tilesets/Sci-Fi-Tiles_A4.png" width="512" height="480"/>
  </tileset>
@@ -197,218 +197,218 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="triggers" width="0" height="0">
-  <object name="door_exit" type="door" x="6592" y="160" width="32" height="32">
+ <objectgroup name="triggers">
+  <object id="1" name="door_exit" type="door" x="192" y="512" width="64" height="64">
    <properties>
-    <property name="key" value=""/>
+    <property name="key" value="porta-potty"/>
     <property name="mapLink" value="Map3"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="platforms" width="0" height="0">
-  <object name="platform-1" type="platform" x="1824" y="776" width="64" height="16">
+ <objectgroup name="platforms">
+  <object id="2" name="platform-1" type="platform" x="1824" y="776" width="64" height="16">
    <properties>
     <property name="key" value="platform"/>
     <property name="wayPoints" value="[[1824, 224],[1824, 776]]"/>
    </properties>
   </object>
-  <object name="platform-3" type="platform" x="2144" y="224" width="96" height="16">
+  <object id="3" name="platform-3" type="platform" x="2144" y="224" width="96" height="16">
    <properties>
     <property name="key" value="platform"/>
     <property name="wayPoints" value="[[2144, 224],[2656, 128],[2656, 192],[2144,288]]"/>
    </properties>
   </object>
-  <object name="platform-2" type="platform" x="2656" y="128" width="96" height="16">
+  <object id="4" name="platform-2" type="platform" x="2656" y="128" width="96" height="16">
    <properties>
     <property name="key" value="platform"/>
     <property name="wayPoints" value="[[2656, 128],[2656, 192],[2144,288], [2144, 224]]"/>
    </properties>
   </object>
-  <object name="platform-4" type="platform" x="4960" y="448" width="96" height="16">
+  <object id="5" name="platform-4" type="platform" x="4960" y="448" width="96" height="16">
    <properties>
     <property name="key" value="platform"/>
     <property name="wayPoints" value="[[4960,448],[5376,448]]"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="spawns" width="0" height="0">
-  <object name="player_spawn" type="spawn" x="128" y="416" width="32" height="32"/>
+ <objectgroup name="spawns">
+  <object id="6" name="player_spawn" type="spawn" x="128" y="416" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="collectables" width="0" height="0">
-  <object name="health-powerup-1" type="health-powerup" x="1984" y="672" width="32" height="32"/>
-  <object name="health-powerup-1" type="health-powerup" x="3360" y="864" width="32" height="32"/>
-  <object name="health-powerup-1" type="health-powerup" x="3488" y="864" width="32" height="32"/>
-  <object name="health-powerup-1" type="health-powerup" x="1376" y="224" width="32" height="32"/>
-  <object name="health-powerup-1" type="health-powerup" x="5312" y="608" width="32" height="32"/>
-  <object name="food-powerup-1" type="food-powerup" x="1728" y="512" width="32" height="32"/>
-  <object name="food-powerup-1" type="food-powerup" x="1664" y="544" width="32" height="32"/>
-  <object name="food-powerup-1" type="food-powerup" x="1440" y="224" width="32" height="32"/>
-  <object name="food-powerup-1" type="food-powerup" x="3424" y="864" width="32" height="32"/>
-  <object name="food-powerup-1" type="food-powerup" x="5056" y="608" width="32" height="32"/>
+ <objectgroup name="collectables">
+  <object id="7" name="health-powerup-1" type="health-powerup" x="1984" y="672" width="32" height="32"/>
+  <object id="8" name="health-powerup-1" type="health-powerup" x="3360" y="864" width="32" height="32"/>
+  <object id="9" name="health-powerup-1" type="health-powerup" x="3488" y="864" width="32" height="32"/>
+  <object id="10" name="health-powerup-1" type="health-powerup" x="1376" y="224" width="32" height="32"/>
+  <object id="11" name="health-powerup-1" type="health-powerup" x="5312" y="608" width="32" height="32"/>
+  <object id="12" name="food-powerup-1" type="food-powerup" x="1728" y="512" width="32" height="32"/>
+  <object id="13" name="food-powerup-1" type="food-powerup" x="1664" y="544" width="32" height="32"/>
+  <object id="14" name="food-powerup-1" type="food-powerup" x="1440" y="224" width="32" height="32"/>
+  <object id="15" name="food-powerup-1" type="food-powerup" x="3424" y="864" width="32" height="32"/>
+  <object id="16" name="food-powerup-1" type="food-powerup" x="5056" y="608" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="villagers" width="0" height="0"/>
- <objectgroup name="characters" width="0" height="0"/>
- <objectgroup name="spawners" width="0" height="0">
-  <object name="spawner-1" type="spawner" x="992" y="712" width="24" height="24">
+ <objectgroup name="villagers"/>
+ <objectgroup name="characters"/>
+ <objectgroup name="spawners">
+  <object id="17" name="spawner-1" type="spawner" x="992" y="712" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="1312" y="736" width="24" height="24">
+  <object id="18" name="spawner-1" type="spawner" x="1312" y="736" width="24" height="24">
    <properties>
     <property name="key" value="dipteranura"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="1664" y="64" width="24" height="24">
+  <object id="19" name="spawner-1" type="spawner" x="1664" y="64" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="1376" y="416" width="24" height="24">
+  <object id="20" name="spawner-1" type="spawner" x="1376" y="416" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="1920" y="32" width="24" height="24">
+  <object id="21" name="spawner-1" type="spawner" x="1920" y="32" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="2608" y="48" width="24" height="24">
+  <object id="22" name="spawner-1" type="spawner" x="2608" y="48" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="3648" y="160" width="24" height="24">
+  <object id="23" name="spawner-1" type="spawner" x="3648" y="160" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="3200" y="288" width="24" height="24">
+  <object id="24" name="spawner-1" type="spawner" x="3200" y="288" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="160" y="744" width="24" height="24">
+  <object id="25" name="spawner-1" type="spawner" x="160" y="744" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="416" y="744" width="24" height="24">
+  <object id="26" name="spawner-1" type="spawner" x="416" y="744" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="4864" y="192" width="24" height="24">
+  <object id="27" name="spawner-1" type="spawner" x="4864" y="192" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="5440" y="640" width="24" height="24">
+  <object id="28" name="spawner-1" type="spawner" x="5440" y="640" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="5600" y="320" width="24" height="24">
+  <object id="29" name="spawner-1" type="spawner" x="5600" y="320" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="5728" y="416" width="24" height="24">
+  <object id="30" name="spawner-1" type="spawner" x="5728" y="416" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="4512" y="608" width="24" height="24">
+  <object id="31" name="spawner-1" type="spawner" x="4512" y="608" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="4448" y="608" width="24" height="24">
+  <object id="32" name="spawner-1" type="spawner" x="4448" y="608" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="4384" y="896" width="24" height="24">
+  <object id="33" name="spawner-1" type="spawner" x="4384" y="896" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="3488" y="320" width="24" height="24">
+  <object id="34" name="spawner-1" type="spawner" x="3488" y="320" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="3712" y="320" width="24" height="24">
+  <object id="35" name="spawner-1" type="spawner" x="3712" y="320" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="5952" y="704" width="24" height="24">
+  <object id="36" name="spawner-1" type="spawner" x="5952" y="704" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="6080" y="128" width="24" height="24">
+  <object id="37" name="spawner-1" type="spawner" x="6080" y="128" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="6080" y="64" width="24" height="24">
+  <object id="38" name="spawner-1" type="spawner" x="6080" y="64" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="6464" y="160" width="24" height="24">
+  <object id="39" name="spawner-1" type="spawner" x="6464" y="160" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="6048" y="256" width="24" height="24">
+  <object id="40" name="spawner-1" type="spawner" x="6048" y="256" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="6336" y="64" width="24" height="24">
+  <object id="41" name="spawner-1" type="spawner" x="6336" y="64" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="4576" y="896" width="24" height="24">
+  <object id="42" name="spawner-1" type="spawner" x="4576" y="896" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="5120" y="160" width="24" height="24">
+  <object id="43" name="spawner-1" type="spawner" x="5120" y="160" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="5408" y="256" width="24" height="24">
+  <object id="44" name="spawner-1" type="spawner" x="5408" y="256" width="24" height="24">
    <properties>
     <property name="key" value="cthulbat"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="5280" y="608" width="24" height="24">
+  <object id="45" name="spawner-1" type="spawner" x="5280" y="608" width="24" height="24">
    <properties>
     <property name="key" value="worm"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="4160" y="832" width="24" height="24">
+  <object id="46" name="spawner-1" type="spawner" x="4160" y="832" width="24" height="24">
    <properties>
     <property name="key" value="dipteranura"/>
    </properties>
   </object>
-  <object name="spawner-1" type="spawner" x="6272" y="704" width="24" height="24">
+  <object id="47" name="spawner-1" type="spawner" x="6272" y="704" width="24" height="24">
    <properties>
     <property name="key" value="dipteranura"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="checkpoints" width="0" height="0">
-  <object type="checkpoint" x="3072" y="32" width="32" height="96"/>
-  <object type="checkpoint" x="4768" y="352" width="32" height="192"/>
-  <object type="checkpoint" x="5888" y="480" width="32" height="224"/>
+ <objectgroup name="checkpoints">
+  <object id="48" type="checkpoint" x="3072" y="32" width="32" height="96"/>
+  <object id="49" type="checkpoint" x="4768" y="352" width="32" height="192"/>
+  <object id="50" type="checkpoint" x="5888" y="480" width="32" height="224"/>
  </objectgroup>
- <objectgroup name="Object Layer 9" width="0" height="0"/>
+ <objectgroup name="Object Layer 9"/>
 </map>
