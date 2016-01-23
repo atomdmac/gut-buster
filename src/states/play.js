@@ -123,10 +123,10 @@ define([
             game.collisionLayer = collisionLayer;
 
             // Create enter/exit doors.
-            enterDoor = ObjectLayerHelper.createObjectByName(game, 'door_enter', map, 'triggers');
+            enterDoor = ObjectLayerHelper.createObjectByName(game, 'door_enter', map, 'triggers', Phaser.Sprite);
             game.add.existing(enterDoor);
 
-            exitDoor = ObjectLayerHelper.createObjectByName(game, 'door_exit', map, 'triggers');
+            exitDoor = ObjectLayerHelper.createObjectByName(game, 'door_exit', map, 'triggers', Phaser.Sprite);
             game.physics.enable(exitDoor);
             exitDoor.body.allowGravity = false;
             exitDoor.body.immovable = true;
