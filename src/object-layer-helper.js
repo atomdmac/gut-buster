@@ -28,7 +28,8 @@ define([
     //create a sprite from an object
     function createFromTiledObject (game, element, customClass) {
         var CustomClass = customClass || GameSprite,
-            sprite = new CustomClass(game, element.x, element.y, element.properties.key || null, element.properties.frame || null, element.properties);
+            frame = parseInt(element.properties.frame),
+            sprite = new CustomClass(game, element.x, element.y, element.properties.key || null, frame, element.properties);
 
         // Copy all properties to the sprite
         Object.keys(element).forEach(function(key) {
