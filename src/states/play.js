@@ -134,6 +134,14 @@ define([
             game.add.existing(exitDoor);
             game.exitDoor = exitDoor;
 
+            //  A mask is a Graphics object
+            exitDoor.maskShape = game.add.graphics(exitDoor.x, exitDoor.y);
+            exitDoor.maskShape.alpha = 0;
+            //  Shapes drawn to the Graphics object must be filled.
+            exitDoor.maskShape.beginFill(0xffffff);
+            //  Here we'll draw a circle
+            exitDoor.maskShape.drawRect(48, 0, 200, 64);
+
             // Insert Commander Kavosic
             characters = ObjectLayerHelper.createObjectsByType(game, 'commander-kavosic', map, 'characters', CommanderKavosic);
             //characters.forEach(this.registerEnemyEvents, this);

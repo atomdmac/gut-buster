@@ -145,6 +145,7 @@ define([
             this.moveRight();
             return;
         } else {
+            this.mask = game.exitDoor.maskShape;
             this.stateMachine.setState('performExit');
         }
     };
