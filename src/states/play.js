@@ -198,6 +198,8 @@ define([
             // HUD
             poopTimer = new PoopTimer(game, 0, 0);
             game.add.existing(poopTimer);
+            poopTimer.events.onTick.add(this.onPoopTimerTick, this);
+            poopTimer.events.onTimeout.add(this.onPoopTimerTimeout, this);
             
             damageDisplay = new DamageDisplay(game, 0, 0);
             game.add.existing(damageDisplay);
@@ -571,7 +573,29 @@ define([
         onPlayerOutOfBounds: function() {
             game.camera.unfollow();
         },
-
+        
+        onPoopTimerTick: function(seconds, maxSeconds) {
+            if (game.rnd.frac() > 0.9) {
+                
+                if (seconds < 10) {
+                    // 3rd tier if under 10 seconds.
+                    player.showDialog(3); 
+                }
+                else if (seconds / maxSeconds < 0.5) {
+                    // 2nd tier if under half of max time.
+                    player.showDialog(2); 
+                }
+                else {
+                    // 1st tier if over half of max time.
+                    player.showDialog(1); 
+                }
+            }
+        },
+        
+        onPoopTimerTimeout: function() {
+            player.damage(1, poopTimer);
+        },
+        
         playerExits: function () {
             // Switch to the "win" state.
             game.camera.unfollow();

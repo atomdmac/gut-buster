@@ -47,6 +47,9 @@ define([
         // The horizontal acceleration that is applied when moving.
         this.moveAccel = 800;
 
+        // Dialog sprites
+        this.dialogs = this.createDialogs();
+        
         // Number of times that the player can die and re-spawn at the last 
         // checkpoint reached.
         this.lives = 3;
@@ -316,6 +319,50 @@ define([
         this.body.acceleration.x = 0;
     };
 
+    Player.prototype.showDialog = function (tier) {
+        console.log('showing dialog of tier',tier);
+        tier--; // Used to access indices of 0-based array.
+        
+        
+        var index = game.rnd.integerInRange(0, this.dialogs[tier].length-1);
+        var dlg = this.dialogs[tier][index];
+        dlg.revive();
+        dlg.lifespan = 2000;
+        
+    };
+
+    Player.prototype.createDialogs = function () {
+        var dialogs = [
+            // Tier 1
+            [
+                new Phaser.Sprite(game, -70, -50, 'dialog-player-tier1-1'),
+                new Phaser.Sprite(game, -70, -55, 'dialog-player-tier1-2'),
+                new Phaser.Sprite(game, -15, -50, 'dialog-player-tier1-3')
+            ],
+            // Tier 2
+            [
+                new Phaser.Sprite(game, -70, -50, 'dialog-player-tier1-1'),
+                new Phaser.Sprite(game, -70, -55, 'dialog-player-tier1-2'),
+                new Phaser.Sprite(game, -15, -50, 'dialog-player-tier1-3')
+            ],
+            // Tier 3
+            [
+                new Phaser.Sprite(game, -70, -50, 'dialog-player-tier1-1'),
+                new Phaser.Sprite(game, -70, -55, 'dialog-player-tier1-2'),
+                new Phaser.Sprite(game, -15, -50, 'dialog-player-tier1-3')
+            ]
+        ];
+        
+        for (var tier = 0; tier < dialogs.length; tier++) {
+            for (var lcv = 0; lcv < dialogs[tier].length; lcv++) {
+                this.addChild(dialogs[tier][lcv]);
+                dialogs[tier][lcv].kill();
+            }
+        }
+        
+        return dialogs;
+    };
+    
     return Player;
 
 });

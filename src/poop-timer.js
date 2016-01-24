@@ -13,7 +13,7 @@ define([
         Phaser.Text.call(this, game, 0, 0, '0:00', { font: "bold 16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
         
         // debug
-        this.set(5);
+        this.set(120);
         
         // Lock to camera.
         this.fixedToCamera = true;
@@ -32,7 +32,7 @@ define([
         this.paused = false;
         this.deltaTimeWhenPaused = 0;
         
-        this.seconds = seconds;
+        this.seconds = this.maxSeconds = seconds;
         this.time = game.time.time;
         this.timeString = normalizeTimeString(this.seconds);
         this.setText(this.timeString);
@@ -53,7 +53,8 @@ define([
                 this.setText(this.timeString);
                 
                 // Dispatch tick event.
-                this.events.onTick.dispatch();
+                this.events.onTick.dispatch(this.seconds,
+                                            this.maxSeconds);
                 
                 // Dispatch timeout event only once.
                 if (this.seconds <= 0) {
