@@ -74,8 +74,8 @@
                  "type":"door",
                  "visible":true,
                  "width":64,
-                 "x":224,
-                 "y":512
+                 "x":544,
+                 "y":704
                 }, 
                 {
                  "height":64,
@@ -940,7 +940,7 @@
  "orientation":"orthogonal",
  "properties":
     {
-
+     "timer":"30"
     },
  "renderorder":"right-down",
  "tileheight":32,

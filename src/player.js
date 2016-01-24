@@ -3,8 +3,9 @@ define([
     'entity',
     'sword',
     'puker',
-    'claw-arm'
-], function (Phaser, Entity, Sword, Puker, ClawArm) { 
+    'claw-arm',
+    'utilities/state-machine'
+], function (Phaser, Entity, Sword, Puker, ClawArm, StateMachine) { 
     'use strict';
 
     // Shortcuts
@@ -94,18 +95,30 @@ define([
         this.events.onRemoveLife = new Phaser.Signal();
         this.events.onAddMaxLife = new Phaser.Signal();
         this.events.onRemoveMaxLife = new Phaser.Signal();
+        this.events.onExit = new Phaser.Signal();
 
         // Kill player when they fall outside the bounds of the map.
         this.events.onOutOfBounds.add(this.handleDeath, this);
 
+        StateMachine.extend(this);
+        this.stateMachine.states = {
+            'normal': {
+                'update': this.update_normal
+            },
+            'approachExit': {
+                'update': this.update_approachExit
+            },
+            'performExit' : {
+                'update': this.update_performExit
+            }
+        };
+        this.stateMachine.setState('normal');
     }
 
     Player.prototype = Object.create(Entity.prototype);
     Player.prototype.constructor = Player;
-    
-    // Update children.
-    Player.prototype.update = function () {
 
+    Player.prototype.update_normal = function () {
         // Update sprite.
         if(this.isJumping && this.body.velocity.y < 0) this.frame = 10;
         else if (!this.body.touching.down && !this.body.blocked.left && !this.body.blocked.right && this.body.velocity.y > 0) this.frame = 11;
@@ -124,6 +137,29 @@ define([
         }
 
         Phaser.Sprite.prototype.update.call(this);
+    };
+
+    Player.prototype.update_approachExit = function () {
+        if(!this.body.onFloor() && !this.body.touching.down) return;
+        if(game.exitDoor.x + game.exitDoor.width + this.width > this.x) {
+            this.moveRight();
+            return;
+        } else {
+            this.stateMachine.setState('performExit');
+        }
+    };
+
+    Player.prototype.update_performExit = function () {
+        this.moveLeft();
+        if(game.exitDoor.x > this.x - this.width) {
+            this.events.onExit.dispatch(this);
+        }
+    };
+    
+    // Update children.
+    Player.prototype.update = function () {
+        console.log(this.stateMachine.getState());
+        this.stateMachine.handle('update');
     };
 
     Player.prototype.attackSword = function () {

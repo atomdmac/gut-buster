@@ -85,6 +85,7 @@ define([
             player.events.onPuke.add(this.onPlayerPuke);
             player.events.onEat.add(this.onPlayerEat);
             player.events.onDeath.add(this.onPlayerDeath);
+            player.events.onExit.add(this.playerExits);
 
             // Make player accessible via game object.
             game.player = player;
@@ -131,6 +132,7 @@ define([
             exitDoor.body.allowGravity = false;
             exitDoor.body.immovable = true;
             game.add.existing(exitDoor);
+            game.exitDoor = exitDoor;
 
             // Insert Commander Kavosic
             characters = ObjectLayerHelper.createObjectsByType(game, 'commander-kavosic', map, 'characters', CommanderKavosic);
@@ -369,6 +371,10 @@ define([
         update: function () {
             // Direct input to player and do all the map and collision stuff.
             if (!player.paused) {
+
+                // Collide with exit.
+                game.physics.arcade.overlap(player, exitDoor, this.playerReachesExit);
+
                 // Collide with platforms unless the user presses jump+down on the
                 // keyboard *or* the controller (but not both).
                 if(!keyboardJumpAndDownPressed() && !gamepadJumpAndDownPressed()) {
@@ -569,6 +575,13 @@ define([
         
         onPlayerOutOfBounds: function() {
             game.camera.unfollow();
+        },
+
+        playerReachesExit: function () {
+            if(player.stateMachine.getState() === 'normal') {
+                player.stateMachine.setState('approachExit');
+            }
+
         },
 
         playerExits: function () {
