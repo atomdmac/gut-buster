@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="32" tileheight="32" nextobjectid="52">
+ <properties>
+  <property name="timer" value="30"/>
+ </properties>
  <tileset firstgid="1" name="Sci-Fi-Tiles_A4" tilewidth="32" tileheight="32">
   <image source="../tilesets/Sci-Fi-Tiles_A4.png" width="512" height="480"/>
  </tileset>
@@ -198,7 +201,7 @@
 </data>
  </layer>
  <objectgroup name="triggers">
-  <object id="1" name="door_exit" type="door" x="224" y="512" width="64" height="64">
+  <object id="1" name="door_exit" type="door" x="544" y="704" width="64" height="64">
    <properties>
     <property name="frame" value="0"/>
     <property name="key" value="porta-potty"/>
