@@ -141,7 +141,7 @@ define([
 
     Player.prototype.update_approachExit = function () {
         if(!this.body.onFloor() && !this.body.touching.down) return;
-        if(game.exitDoor.x + game.exitDoor.width + this.width > this.x) {
+        if(game.exitDoor.x + game.exitDoor.width > this.x) {
             this.moveRight();
             return;
         } else {
@@ -159,7 +159,6 @@ define([
     
     // Update children.
     Player.prototype.update = function () {
-        console.log(this.stateMachine.getState());
         this.stateMachine.handle('update');
     };
 
@@ -351,6 +350,12 @@ define([
 
     Player.prototype.stopMoving = function () {
         this.body.acceleration.x = 0;
+    };
+
+    Player.prototype.damage = function () {
+        if(this.stateMachine.getState() === 'normal') {
+            Entity.prototype.damage.apply(this, arguments);
+        }
     };
 
     return Player;

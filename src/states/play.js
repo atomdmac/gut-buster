@@ -125,6 +125,8 @@ define([
 
             // Create enter/exit doors.
             enterDoor = ObjectLayerHelper.createObjectByName(game, 'door_enter', map, 'triggers', Phaser.Sprite);
+            var stinkAnim = enterDoor.animations.add('stink', [4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 15, true);
+            stinkAnim.play(true);
             game.add.existing(enterDoor);
 
             exitDoor = ObjectLayerHelper.createObjectByName(game, 'door_exit', map, 'triggers', Phaser.Sprite);
@@ -134,13 +136,15 @@ define([
             game.add.existing(exitDoor);
             game.exitDoor = exitDoor;
 
+            // Door opening animation.
+            exitDoor.animations.add('open', [0, 1, 2, 3], 15);
             //  A mask is a Graphics object
             exitDoor.maskShape = game.add.graphics(exitDoor.x, exitDoor.y);
             exitDoor.maskShape.alpha = 0;
             //  Shapes drawn to the Graphics object must be filled.
             exitDoor.maskShape.beginFill(0xffffff);
             //  Here we'll draw a circle
-            exitDoor.maskShape.drawRect(48, 0, 200, 64);
+            exitDoor.maskShape.drawRect(41, -64, 512, 128);
 
             // Insert Commander Kavosic
             characters = ObjectLayerHelper.createObjectsByType(game, 'commander-kavosic', map, 'characters', CommanderKavosic);
@@ -587,6 +591,7 @@ define([
 
         playerReachesExit: function () {
             if(player.stateMachine.getState() === 'normal') {
+                exitDoor.animations.getAnimation('open').play();
                 player.stateMachine.setState('approachExit');
             }
 
