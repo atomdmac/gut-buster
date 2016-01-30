@@ -19,11 +19,12 @@ define([
     'health-powerup',
     'food-powerup',
     'checkpoint',
+    'duti-drop',
     'character-trigger',
     'levels/test-map-1'
 
 
-], function (Phaser, GameGroup, Player, PauseMenu, Spawner, Enemy, Cthulbat, Worm, Dipteranura, EggSac, CommanderKavosic, Platform, ObjectLayerHelper, HealthDisplay, StomachMeter, DamageDisplay, LivesDisplay, HealthPowerup, FoodPowerup, Checkpoint, CharacterTrigger, TestMap1) { 
+], function (Phaser, GameGroup, Player, PauseMenu, Spawner, Enemy, Cthulbat, Worm, Dipteranura, EggSac, CommanderKavosic, Platform, ObjectLayerHelper, HealthDisplay, StomachMeter, DamageDisplay, LivesDisplay, HealthPowerup, FoodPowerup, Checkpoint, DutiDrop, CharacterTrigger, TestMap1) { 
     'use strict';
     
     // Shortcuts
@@ -124,27 +125,13 @@ define([
             game.collisionLayer = collisionLayer;
 
             // Create enter/exit doors.
-            enterDoor = ObjectLayerHelper.createObjectByName(game, 'door_enter', map, 'triggers', Phaser.Sprite);
-            var stinkAnim = enterDoor.animations.add('stink', [4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 15, true);
-            stinkAnim.play(true);
+            enterDoor = ObjectLayerHelper.createObjectByName(game, 'door_enter', map, 'triggers', DutiDrop);
+            enterDoor.ruin(); // Someone made a *mess* in here...
             game.add.existing(enterDoor);
 
-            exitDoor = ObjectLayerHelper.createObjectByName(game, 'door_exit', map, 'triggers', Phaser.Sprite);
-            game.physics.enable(exitDoor);
-            exitDoor.body.allowGravity = false;
-            exitDoor.body.immovable = true;
+            exitDoor = ObjectLayerHelper.createObjectByName(game, 'door_exit', map, 'triggers', DutiDrop);
             game.add.existing(exitDoor);
             game.exitDoor = exitDoor;
-
-            // Door opening animation.
-            exitDoor.animations.add('open', [0, 1, 2, 3], 15);
-            //  A mask is a Graphics object
-            exitDoor.maskShape = game.add.graphics(exitDoor.x, exitDoor.y);
-            exitDoor.maskShape.alpha = 0;
-            //  Shapes drawn to the Graphics object must be filled.
-            exitDoor.maskShape.beginFill(0xffffff);
-            //  Here we'll draw a circle
-            exitDoor.maskShape.drawRect(41, -64, 512, 128);
 
             // Insert Commander Kavosic
             characters = ObjectLayerHelper.createObjectsByType(game, 'commander-kavosic', map, 'characters', CommanderKavosic);
@@ -590,8 +577,8 @@ define([
         },
 
         playerReachesExit: function () {
+            exitDoor.open();
             if(player.stateMachine.getState() === 'normal') {
-                exitDoor.animations.getAnimation('open').play();
                 player.stateMachine.setState('approachExit');
             }
 
