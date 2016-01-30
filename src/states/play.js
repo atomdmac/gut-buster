@@ -12,6 +12,7 @@ define([
     'commander-kavosic',
     'platform',
     'object-layer-helper',
+    'poop-timer',
     'health-display',
     'stomach-meter',
     'damage-display',
@@ -22,13 +23,59 @@ define([
     'duti-drop',
     'character-trigger',
     'levels/test-map-1'
+], function (
+    Phaser,
+    GameGroup,
+    Player,
+    PauseMenu,
+    Spawner,
+    Enemy,
+    Cthulbat,
+    Worm,
+    Dipteranura,
+    EggSac,
+    CommanderKavosic,
+    Platform,
+    ObjectLayerHelper,
+    PoopTimer,
+    HealthDisplay,
+    StomachMeter,
+    DamageDisplay,
+    LivesDisplay,
+    HealthPowerup,
+    FoodPowerup,
+    Checkpoint,
+    DutiDrop,
+    CharacterTrigger,
+    TestMap1) {
 
-
-], function (Phaser, GameGroup, Player, PauseMenu, Spawner, Enemy, Cthulbat, Worm, Dipteranura, EggSac, CommanderKavosic, Platform, ObjectLayerHelper, HealthDisplay, StomachMeter, DamageDisplay, LivesDisplay, HealthPowerup, FoodPowerup, Checkpoint, DutiDrop, CharacterTrigger, TestMap1) { 
     'use strict';
     
     // Shortcuts
-    var game, playState, moveKeys, attackKeys, pad1, player, pauseMenu, spawners, enemies, characters, map, collisionLayer, platforms, characterTriggers, enterDoor, exitDoor, healthDisplay, stomachMeter, damageDisplay, livesDisplay, collectables, checkpoints, level;
+    var game, 
+        playState, 
+        moveKeys, 
+        attackKeys,
+        pad1,
+        player,
+        pauseMenu,
+        spawners,
+        enemies,
+        characters,
+        map,
+        collisionLayer,
+        platforms,
+        characterTriggers,
+        enterDoor,
+        exitDoor,
+        poopTimer,
+        healthDisplay,
+        stomachMeter,
+        damageDisplay,
+        livesDisplay,
+        collectables,
+        checkpoints,
+        level;
 
     // Default starting properties/state of the game world. These properties
     // can be overridden by passing a data object to the Play state.
@@ -201,6 +248,11 @@ define([
             game.add.existing(collectables);
             
             // HUD
+            poopTimer = new PoopTimer(game, 0, 0);
+            game.add.existing(poopTimer);
+            poopTimer.events.onTick.add(this.onPoopTimerTick, this);
+            poopTimer.events.onTimeout.add(this.onPoopTimerTimeout, this);
+            
             damageDisplay = new DamageDisplay(game, 0, 0);
             game.add.existing(damageDisplay);
             damageDisplay.setMaxHealth(player.maxHealth);
@@ -447,6 +499,7 @@ define([
                 player.paused = false;
                 collectables.paused = false;
                 platforms.paused = false;
+                poopTimer.paused = false;
                 
                 // This is dumb. Enemies should just be a GameGroup, but I'm lazy.
                 for (var lcv = 0; lcv < enemies.length; lcv++) {
@@ -459,6 +512,7 @@ define([
                 player.paused = true;
                 collectables.paused = true;
                 platforms.paused = true;
+                poopTimer.paused = true;
                 
                 // This is dumb. Enemies should just be a GameGroup, but I'm lazy.
                 for (var lcv = 0; lcv < enemies.length; lcv++) {
@@ -579,6 +633,28 @@ define([
         playerReachesExit: function () {
             exitDoor.open();
             player.exitLevel();
+        },
+        
+        onPoopTimerTick: function(seconds, maxSeconds) {
+            if (game.rnd.frac() > 0.9) {
+                
+                if (seconds < 10) {
+                    // 3rd tier if under 10 seconds.
+                    player.showDialog(3); 
+                }
+                else if (seconds / maxSeconds < 0.5) {
+                    // 2nd tier if under half of max time.
+                    player.showDialog(2); 
+                }
+                else {
+                    // 1st tier if over half of max time.
+                    player.showDialog(1); 
+                }
+            }
+        },
+        
+        onPoopTimerTimeout: function() {
+            player.damage(1, poopTimer);
         },
 
         playerExits: function () {

@@ -93,6 +93,11 @@ define([
             this.game.load.image('eat', 'assets/sprites/eat.png');
             this.game.load.spritesheet('food-powerup', 'assets/sprites/food-powerup.png', 32, 32, 6);
             
+            // Dialog bubbles
+            this.game.load.image('dialog-player-tier1-1', 'assets/sprites/dialog/player-tier1-1.png');
+            this.game.load.image('dialog-player-tier1-2', 'assets/sprites/dialog/player-tier1-2.png');
+            this.game.load.image('dialog-player-tier1-3', 'assets/sprites/dialog/player-tier1-3.png');
+            
             // Can be used for anything that doesn't need a sprite sheet.
             // Workaround for issue: https://github.com/photonstorm/phaser/issues/2173
             this.game.load.image('blank', 'assets/blank.png');
