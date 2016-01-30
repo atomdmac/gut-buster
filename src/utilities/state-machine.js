@@ -16,7 +16,21 @@ function (Phaser) {
 
 	StateMachine.prototype.setState = function (name) {
 		if (!this.states[name]) throw ('State "' + name + '" does not exist.');
+		
+		// Call old state's _onExit handler if present.
+		if(typeof this.states[name]._onExit === 'function') {
+			this.states[name]._onExit.call(this.parent || this, name);
+		}
+
+		var oldState = this.currentState;
 		this.currentState = name;
+
+		// Call new state's _onEnter handler if present.
+		if(typeof this.states[name]._onEnter === 'function') {
+			this.states[name]._onEnter.call(this.parent || this, oldState);
+		}
+
+		// Make listeners aware of the state change.
 		this.onStateChange.dispatch(this, name);
 	};
 
