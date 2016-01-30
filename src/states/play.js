@@ -578,10 +578,7 @@ define([
 
         playerReachesExit: function () {
             exitDoor.open();
-            if(player.stateMachine.getState() === 'normal') {
-                player.stateMachine.setState('approachExit');
-            }
-
+            player.exitLevel();
         },
 
         playerExits: function () {

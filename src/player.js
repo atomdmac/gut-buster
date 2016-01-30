@@ -352,7 +352,20 @@ define([
         this.body.acceleration.x = 0;
     };
 
+    /* Cause the player to exit the level.  This entails:
+     * - Stop accepting user input
+     * - Move the player to the exit
+     * Most of this will be handled by the Player's statemachine.
+     */
+    Player.prototype.exitLevel = function () {
+        // Only attempt to leave the level if we're not already trying to do so.
+        if(this.stateMachine.getState() === 'normal') {
+            this.stateMachine.setState('approachExit');
+        }
+    };
+
     Player.prototype.damage = function () {
+        // Player cannot take damage/knockback unless under user control.
         if(this.stateMachine.getState() === 'normal') {
             Entity.prototype.damage.apply(this, arguments);
         }
