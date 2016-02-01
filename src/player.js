@@ -4,8 +4,9 @@ define([
     'sword',
     'puker',
     'claw-arm',
+    'speech-bubble',
     'utilities/state-machine'
-], function (Phaser, Entity, Sword, Puker, ClawArm, StateMachine) { 
+], function (Phaser, Entity, Sword, Puker, ClawArm, SpeechBubble, StateMachine) { 
     'use strict';
 
     // Shortcuts
@@ -50,6 +51,8 @@ define([
 
         // Dialog sprites
         this.dialogs = this.createDialogs();
+        // What's our guy currently saying?
+        this.saying = null;
         
         // Number of times that the player can die and re-spawn at the last 
         // checkpoint reached.
@@ -375,14 +378,16 @@ define([
     };
 
     Player.prototype.showDialog = function (tier) {
-        console.log('showing dialog of tier',tier);
         tier--; // Used to access indices of 0-based array.
         
-        
+        // Don't share more than one thought at once.
+        if(this.saying && this.saying.alive) return;
+
         var index = game.rnd.integerInRange(0, this.dialogs[tier].length-1);
-        var dlg = this.dialogs[tier][index];
-        dlg.revive();
-        dlg.lifespan = 2000;
+        this.saying = this.dialogs[tier][index];
+        this.saying.revive();
+        this.saying.bringToTop();
+        this.saying.lifespan = 2000;
         
     };
 
@@ -390,27 +395,27 @@ define([
         var dialogs = [
             // Tier 1
             [
-                new Phaser.Sprite(game, -70, -50, 'dialog-player-tier1-1'),
-                new Phaser.Sprite(game, -70, -55, 'dialog-player-tier1-2'),
-                new Phaser.Sprite(game, -15, -50, 'dialog-player-tier1-3')
+                new SpeechBubble(game, -70, -50, 'dialog-player-tier1-1', 0, this),
+                new SpeechBubble(game, -70, -55, 'dialog-player-tier1-2', 0, this),
+                new SpeechBubble(game, -15, -50, 'dialog-player-tier1-3', 0, this)
             ],
             // Tier 2
             [
-                new Phaser.Sprite(game, -70, -50, 'dialog-player-tier1-1'),
-                new Phaser.Sprite(game, -70, -55, 'dialog-player-tier1-2'),
-                new Phaser.Sprite(game, -15, -50, 'dialog-player-tier1-3')
+                new SpeechBubble(game, -70, -50, 'dialog-player-tier1-1', 0, this),
+                new SpeechBubble(game, -70, -55, 'dialog-player-tier1-2', 0, this),
+                new SpeechBubble(game, -15, -50, 'dialog-player-tier1-3', 0, this)
             ],
             // Tier 3
             [
-                new Phaser.Sprite(game, -70, -50, 'dialog-player-tier1-1'),
-                new Phaser.Sprite(game, -70, -55, 'dialog-player-tier1-2'),
-                new Phaser.Sprite(game, -15, -50, 'dialog-player-tier1-3')
+                new SpeechBubble(game, -70, -50, 'dialog-player-tier1-1', 0, this),
+                new SpeechBubble(game, -70, -55, 'dialog-player-tier1-2', 0, this),
+                new SpeechBubble(game, -15, -50, 'dialog-player-tier1-3', 0, this)
             ]
         ];
         
         for (var tier = 0; tier < dialogs.length; tier++) {
             for (var lcv = 0; lcv < dialogs[tier].length; lcv++) {
-                this.addChild(dialogs[tier][lcv]);
+                game.add.existing(dialogs[tier][lcv]);
                 dialogs[tier][lcv].kill();
             }
         }
