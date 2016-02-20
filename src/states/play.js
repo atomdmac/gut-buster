@@ -19,8 +19,7 @@ define([
     'health-powerup',
     'food-powerup',
     'checkpoint',
-    'duti-drop',
-    'levels/test-map-1'
+    'duti-drop'
 ], function (
     Phaser,
     GameGroup,
@@ -42,8 +41,7 @@ define([
     HealthPowerup,
     FoodPowerup,
     Checkpoint,
-    DutiDrop,
-    TestMap1) {
+    DutiDrop) {
 
     'use strict';
     
@@ -69,8 +67,7 @@ define([
         damageDisplay,
         livesDisplay,
         collectables,
-        checkpoints,
-        level;
+        checkpoints;
 
     // Default starting properties/state of the game world. These properties
     // can be overridden by passing a data object to the Play state.
@@ -216,9 +213,6 @@ define([
             game.physics.arcade.checkCollision.down = false;
             // Assign impasasble tiles for collision.
             map.setCollisionByExclusion([], true, 'foreground-structure');
-
-            // Create character plot triggers
-            level = new TestMap1();
 
             // Platforms
             platforms = new GameGroup(game);
