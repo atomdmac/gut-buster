@@ -9,7 +9,6 @@ define([
     'worm',
     'dipteranura',
     'egg-sac',
-    'commander-kavosic',
     'platform',
     'object-layer-helper',
     'poop-timer',
@@ -21,7 +20,6 @@ define([
     'food-powerup',
     'checkpoint',
     'duti-drop',
-    'character-trigger',
     'levels/test-map-1'
 ], function (
     Phaser,
@@ -34,7 +32,6 @@ define([
     Worm,
     Dipteranura,
     EggSac,
-    CommanderKavosic,
     Platform,
     ObjectLayerHelper,
     PoopTimer,
@@ -46,7 +43,6 @@ define([
     FoodPowerup,
     Checkpoint,
     DutiDrop,
-    CharacterTrigger,
     TestMap1) {
 
     'use strict';
@@ -65,7 +61,6 @@ define([
         map,
         collisionLayer,
         platforms,
-        characterTriggers,
         enterDoor,
         exitDoor,
         poopTimer,
@@ -180,12 +175,6 @@ define([
             game.add.existing(exitDoor);
             game.exitDoor = exitDoor;
 
-            // Insert Commander Kavosic
-            characters = ObjectLayerHelper.createObjectsByType(game, 'commander-kavosic', map, 'characters', CommanderKavosic);
-            //characters.forEach(this.registerEnemyEvents, this);
-            game.add.existing(characters);
-            
-
             // Spawn point
             var spawnPoint = ObjectLayerHelper.createObjectByName(game, 'player_spawn', map, 'spawns');
 
@@ -230,10 +219,6 @@ define([
 
             // Create character plot triggers
             level = new TestMap1();
-            //game.add.existing(level);
-            characterTriggers = ObjectLayerHelper.createObjectsByType(game, 'character-trigger', map, 'triggers', CharacterTrigger);
-            game.add.existing(characterTriggers);
-
 
             // Platforms
             platforms = new GameGroup(game);
@@ -425,9 +410,6 @@ define([
                 // Collide player + enemies.
                 game.physics.arcade.overlap(player, enemies, this.onPlayerCollidesEnemy);
                 
-                // Check overlap of player + character triggers.
-                game.physics.arcade.overlap(player, characterTriggers, this.onPlayerOverlapCharacterTrigger);
-                
                 // Collide player + collectables.
                 game.physics.arcade.overlap(player, collectables, this.onPlayerCollidesCollectable);
     
@@ -511,14 +493,6 @@ define([
             enemy.events.onDeath.add(this.onEnemyDeath, this);
             enemy.events.onDrop.add(this.onEnemyDrop, this);
             if (enemy.events.onSpawnChild) enemy.events.onSpawnChild.add(this.onSpawnerSpawn, this);
-        },
-        
-        onPlayerOverlapCharacterTrigger: function (player, characterTrigger) {
-            characters.forEach( function(character) {
-                if (character.name === characterTrigger.properties.characterTriggerTarget) {
-                    level.handleTrigger(character, characterTrigger.properties.key, characterTrigger.properties);
-                }
-            });
         },
         
         onSpawnerSpawn: function(spawner, sprite) {
