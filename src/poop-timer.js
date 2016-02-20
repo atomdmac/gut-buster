@@ -5,7 +5,7 @@ define([
 
     var game;
 
-    function PoopTimer (_game, x, y) {
+    function PoopTimer (_game, time) {
 
         game = _game;
 
@@ -13,7 +13,8 @@ define([
         Phaser.Text.call(this, game, 0, 0, '0:00', { font: "bold 16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
         
         // debug
-        this.set(120);
+        this.defaultTime = 120;
+        this.set(time ? time : this.defaultTime);
         
         // Lock to camera.
         this.fixedToCamera = true;
@@ -30,10 +31,9 @@ define([
 
     PoopTimer.prototype.set = function (seconds) {
         this.paused = false;
-        this.deltaTimeWhenPaused = 0;
+        this.timeElapsed = 0;
         
         this.seconds = this.maxSeconds = seconds;
-        this.time = game.time.time;
         this.timeString = normalizeTimeString(this.seconds);
         this.setText(this.timeString);
     };
@@ -46,9 +46,12 @@ define([
         if (!this.paused) {
             Phaser.Text.prototype.update.call(this);
             
-            if (this.seconds > 0 && game.time.time >= this.time + 1000) {
+            this.timeElapsed += game.time.physicsElapsed;
+            
+            if (this.seconds > 0 && this.timeElapsed >= 1) {
                 this.seconds--;
-                this.time += 1000;
+                this.timeElapsed--;
+                
                 this.timeString = normalizeTimeString(this.seconds);
                 this.setText(this.timeString);
                 
@@ -61,13 +64,6 @@ define([
                     this.events.onTimeout.dispatch();
                 }
             }
-            
-            // Keep track of delta for synching when paused.
-            this.deltaTimeWhenPaused = game.time.time - this.time;
-        }
-        else {
-            // Synch with game time when paused.
-            this.time = game.time.time - this.deltaTimeWhenPaused;
         }
     };
 

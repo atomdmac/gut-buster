@@ -51,7 +51,6 @@
          "objects":[
                 {
                  "height":64,
-                 "id":1,
                  "name":"door_exit",
                  "properties":
                     {
@@ -68,7 +67,6 @@
                 }, 
                 {
                  "height":64,
-                 "id":44,
                  "name":"door_enter",
                  "properties":
                     {
@@ -109,7 +107,6 @@
          "objects":[
                 {
                  "height":32,
-                 "id":2,
                  "name":"player_spawn",
                  "properties":
                     {
@@ -124,7 +121,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":3,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -139,7 +135,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":4,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -154,7 +149,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":5,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -169,7 +163,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":6,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -184,7 +177,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":7,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -199,7 +191,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":8,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -214,7 +205,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":9,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -229,7 +219,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":10,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -244,7 +233,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":11,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -259,7 +247,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":12,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -274,7 +261,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":13,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -289,7 +275,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":14,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -304,7 +289,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":15,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -319,7 +303,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":16,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -346,7 +329,6 @@
          "objects":[
                 {
                  "height":32,
-                 "id":17,
                  "name":"health-powerup-1",
                  "properties":
                     {
@@ -361,7 +343,6 @@
                 }, 
                 {
                  "height":32,
-                 "id":18,
                  "name":"health-powerup-1",
                  "properties":
                     {
@@ -376,7 +357,6 @@
                 }, 
                 {
                  "height":32,
-                 "id":19,
                  "name":"health-powerup-1",
                  "properties":
                     {
@@ -427,7 +407,6 @@
          "objects":[
                 {
                  "height":24,
-                 "id":20,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -442,7 +421,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":21,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -457,7 +435,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":22,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -472,7 +449,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":23,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -487,7 +463,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":24,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -502,7 +477,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":25,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -517,7 +491,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":26,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -532,7 +505,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":27,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -547,7 +519,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":28,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -562,7 +533,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":29,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -577,7 +547,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":30,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -592,7 +561,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":31,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -607,7 +575,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":32,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -622,7 +589,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":33,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -637,7 +603,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":34,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -652,7 +617,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":35,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -667,7 +631,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":36,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -682,7 +645,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":37,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -697,7 +659,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":38,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -712,7 +673,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":39,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -727,7 +687,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":40,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -742,7 +701,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":41,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -757,7 +715,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":42,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -772,7 +729,6 @@
                 }, 
                 {
                  "height":24,
-                 "id":43,
                  "name":"spawner-1",
                  "properties":
                     {
@@ -804,11 +760,10 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":45,
  "orientation":"orthogonal",
  "properties":
     {
-     "mapTimer":"30"
+     "timer":"45"
     },
  "renderorder":"right-down",
  "tileheight":32,
@@ -825,7 +780,6 @@
 
             },
          "spacing":0,
-         "tilecount":240,
          "tileheight":32,
          "tilewidth":32
         }, 
@@ -841,7 +795,6 @@
 
             },
          "spacing":0,
-         "tilecount":128,
          "tileheight":32,
          "tilewidth":32
         }, 
@@ -857,7 +810,6 @@
 
             },
          "spacing":0,
-         "tilecount":256,
          "tileheight":32,
          "tilewidth":32
         }, 
@@ -873,7 +825,6 @@
 
             },
          "spacing":0,
-         "tilecount":256,
          "tileheight":32,
          "tilewidth":32
         }, 
@@ -889,7 +840,6 @@
 
             },
          "spacing":0,
-         "tilecount":256,
          "tileheight":32,
          "tilewidth":32
         }, 
@@ -905,7 +855,6 @@
 
             },
          "spacing":0,
-         "tilecount":256,
          "tileheight":32,
          "tilewidth":32
         }, 
@@ -921,7 +870,6 @@
 
             },
          "spacing":0,
-         "tilecount":320,
          "tileheight":32,
          "tilewidth":32,
          "transparentcolor":"#000000"
@@ -938,7 +886,6 @@
 
             },
          "spacing":0,
-         "tilecount":32,
          "tileheight":32,
          "tilewidth":32
         }, 
@@ -954,7 +901,6 @@
 
             },
          "spacing":0,
-         "tilecount":4,
          "tileheight":32,
          "tilewidth":32
         }],

@@ -170,7 +170,8 @@ define([
         // Can currently take damage?
         if(this.invulnerable) return;
 
-        amount = amount < 0 ? 0 : amount;
+        // Apply damage.  Lowest possible damage amount is 0.
+		if (amount < 0) amount = 0;
         this.health -= amount;
         this.events.onDamage.dispatch(this.health, amount);
 
