@@ -526,7 +526,10 @@ define([
         },
         
         onPlayerCollidesEnemy: function (player, enemy) {
-            if(!enemy.invulnerable && !enemy.dying) player.damage(0.5, enemy);
+            if(!enemy.invulnerable && !enemy.dying) {
+                // Enemies don't do lethal damage; just knockback.
+                player.damage(0, enemy);
+            }
         },
 
         onPlayerCollidesCheckpoint: function (player, checkpoint) {
