@@ -175,9 +175,6 @@ define([
         this.health -= amount;
         this.events.onDamage.dispatch(this.health, amount);
 
-        // Temporary invulnerability.
-        this.makeInvulnerable();
-
         // If the damage is coming from a specific source, apply knockback.
         if(source) this.applyKnockBack(source);
         
