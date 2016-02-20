@@ -1,12 +1,10 @@
 define([
     'phaser',
     'entity',
-    'sword',
     'puker',
-    'claw-arm',
     'speech-bubble',
     'utilities/state-machine'
-], function (Phaser, Entity, Sword, Puker, ClawArm, SpeechBubble, StateMachine) { 
+], function (Phaser, Entity, Puker, SpeechBubble, StateMachine) { 
     'use strict';
 
     // Shortcuts
@@ -73,13 +71,8 @@ define([
 
         // Equip weapons
         this.weapons = [];
-        this.weapons.sword   = new Sword(game, 0, 0);
         this.weapons.puker     = new Puker(game, 20, 14);
-        this.weapons.clawArm = new ClawArm(game, 0, 0);
-
-        this.weapons.push(this.weapons.sword);
         this.weapons.push(this.weapons.puker);
-        this.weapons.push(this.weapons.clawArm);
 
         for(var i=0; i<this.weapons.length; i++) {
             this.addChild(this.weapons[i]);
@@ -168,23 +161,15 @@ define([
         this.stateMachine.handle('update');
     };
 
-    Player.prototype.attackSword = function () {
-        this.weapons[0].use();
-    };
-
     Player.prototype.attackPuker = function () {
         if (this.fullness > 0) {
-            this.weapons[1].use();
+            this.weapons[0].use();
         }
     };
 
     Player.prototype.onPukerPuke = function () {
         this.fullness--;
         this.events.onPuke.dispatch();
-    };
-    
-    Player.prototype.attackClaw = function () {
-        this.weapons[2].use();
     };
 
     Player.prototype.heal = function (amount, source) {
