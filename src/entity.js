@@ -145,7 +145,7 @@ define([
         // Can currently take damage?
         if(this.invulnerable) return;
 
-        amount = Math.abs(amount || 1);
+		if (amount < 0) amount = 0;
         this.health -= amount;
         this.events.onDamage.dispatch(this.health, amount);
 
