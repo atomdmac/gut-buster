@@ -10,8 +10,21 @@ define([
         game = _game;
 
         // Initialize sprite
-        Phaser.Text.call(this, game, 0, 0, '0:00', { font: "bold 16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
+        Phaser.Text.call(this, game, 0, 0, '0:00');
+        
+        //	Center align
         this.anchor.set(0.5);
+        this.align = 'center';
+    
+        //	Font style
+        this.font = 'Arial Black';
+        this.fontSize = 18;
+        this.fontWeight = 'bold';
+    
+        //	Stroke color and thickness
+        this.stroke = '#000000';
+        this.strokeThickness = 2;
+        this.fill = '#ffffff';
         
         this.defaultScale = new Phaser.Point(1, 1);
         this.defaultCameraOffset = new Phaser.Point(game.camera.width/2, 20);
