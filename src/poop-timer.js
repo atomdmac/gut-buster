@@ -83,7 +83,7 @@ define([
         
         game.add.tween(this).to(
             { seconds: this.startTime },    // Incrememnt seconds
-            2000,                           // dramtically
+            2000,                           // dramatically
             Phaser.Easing.Cubic.InOut,      // with some easing
             true)                           // and start automatically.
         .onUpdateCallback(this.updateTimeText, this) // Keep display updated.
@@ -92,8 +92,6 @@ define([
 
     /*
      * Moves the timer into it's normal position and triggers the timer to start.
-     * 
-     * 
      */
     PoopTimer.prototype.finishIntroAnimation = function () {
         // Normalize this.seconds after we finish tweening the timer display,
