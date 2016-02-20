@@ -157,7 +157,7 @@
  "orientation":"orthogonal",
  "properties":
     {
-
+     "timer":"45"
     },
  "renderorder":"right-down",
  "tileheight":32,

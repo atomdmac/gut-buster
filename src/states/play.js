@@ -248,7 +248,7 @@ define([
             game.add.existing(collectables);
             
             // HUD
-            poopTimer = new PoopTimer(game, 0, 0);
+            poopTimer = new PoopTimer(game, map.properties.timer);
             game.add.existing(poopTimer);
             poopTimer.events.onTick.add(this.onPoopTimerTick, this);
             poopTimer.events.onTimeout.add(this.onPoopTimerTimeout, this);

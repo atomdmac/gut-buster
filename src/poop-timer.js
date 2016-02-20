@@ -5,7 +5,7 @@ define([
 
     var game;
 
-    function PoopTimer (_game, x, y) {
+    function PoopTimer (_game, time) {
 
         game = _game;
 
@@ -13,7 +13,8 @@ define([
         Phaser.Text.call(this, game, 0, 0, '0:00', { font: "bold 16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
         
         // debug
-        this.set(120);
+        this.defaultTime = 120;
+        this.set(time ? time : this.defaultTime);
         
         // Lock to camera.
         this.fixedToCamera = true;
