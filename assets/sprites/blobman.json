@@ -1,6 +1,6 @@
 { "frames": {
    "blobman 0.aseprite": {
-    "frame": { "x": 1, "y": 1, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 0, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -8,7 +8,7 @@
     "duration": 60
    },
    "blobman 1.aseprite": {
-    "frame": { "x": 36, "y": 1, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 48, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -16,7 +16,7 @@
     "duration": 60
    },
    "blobman 2.aseprite": {
-    "frame": { "x": 71, "y": 1, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 96, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -24,7 +24,7 @@
     "duration": 60
    },
    "blobman 3.aseprite": {
-    "frame": { "x": 106, "y": 1, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 144, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -32,7 +32,7 @@
     "duration": 60
    },
    "blobman 4.aseprite": {
-    "frame": { "x": 141, "y": 1, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 192, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -40,7 +40,7 @@
     "duration": 60
    },
    "blobman 5.aseprite": {
-    "frame": { "x": 176, "y": 1, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 240, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -48,7 +48,7 @@
     "duration": 60
    },
    "blobman 6.aseprite": {
-    "frame": { "x": 211, "y": 1, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 288, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -56,7 +56,7 @@
     "duration": 60
    },
    "blobman 7.aseprite": {
-    "frame": { "x": 1, "y": 52, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 336, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -64,7 +64,7 @@
     "duration": 60
    },
    "blobman 8.aseprite": {
-    "frame": { "x": 36, "y": 52, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 384, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -72,7 +72,7 @@
     "duration": 60
    },
    "blobman 9.aseprite": {
-    "frame": { "x": 71, "y": 52, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 432, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -80,7 +80,7 @@
     "duration": 60
    },
    "blobman 10.aseprite": {
-    "frame": { "x": 106, "y": 52, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 480, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -88,7 +88,7 @@
     "duration": 60
    },
    "blobman 11.aseprite": {
-    "frame": { "x": 141, "y": 52, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 528, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -96,7 +96,7 @@
     "duration": 60
    },
    "blobman 12.aseprite": {
-    "frame": { "x": 176, "y": 52, "w": 34, "h": 50 },
+    "frame": { "x": 0, "y": 576, "w": 32, "h": 48 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
@@ -106,10 +106,10 @@
  },
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.1.0.1",
-  "image": "C:\\Users\\zbennett\\Documents\\LightTPD\\htdocs\\platformer-demo\\assets\\sprites\\blobman.png",
+  "version": "1.1.1",
+  "image": "/Users/atommac/Code/platformer-demo/assets/sprites/blobman.png",
   "format": "RGBA8888",
-  "size": { "w": 256, "h": 128 },
+  "size": { "w": 32, "h": 624 },
   "scale": "1"
  }
 }

@@ -48,11 +48,17 @@ define([
 
     Puker.prototype.use = function (direction) {
         if (!this.canUse()) return;
-        var v = {x:(this.parent.scale.x*Math.random()*150 - 75) + this.parent.body.velocity.x,
-                 y: 0};
-        var missile = this.missiles.getFirstDead(true, this.parent.x+(this.x*this.parent.scale.x), this.parent.y+this.y);
+
+        // Since Puker will be a child of the owner's head, we need to create
+        // a reference to the parent's (i.e. the head) parent.
+        // TODO: Find a more straightforward way to reference the parent's parent.
+        var parent = this.parent.parent,
+            v = {
+                x:(parent.scale.x*Math.random()*150 - 75) + parent.body.velocity.x, 
+                y: 0};
+        var missile = this.missiles.getFirstDead(true, parent.x+(this.x*parent.scale.x), parent.y+this.y);
         game.world.bringToTop(this.missiles);
-        missile.fire(this.parent.scale.x, v);
+        missile.fire(parent.scale.x, v);
         this.useTimeout = game.time.now;
         this.events.onPuke.dispatch();
     };
