@@ -34,6 +34,10 @@ define([
 
         // The acceleration that is applied when moving.
         // this.moveAccel = 16000;
+
+        // The amount of knockback that this entity will apply to objects that
+        // collide with it.
+        this.knockbackAmount = 500;
      
         // Initial health.
         this.health = this.maxHealth = 1;
@@ -134,6 +138,27 @@ define([
         }
     };
 
+    Entity.prototype.applyKnockBack = function (source) {
+        // Knockback force
+        Phaser.Point.subtract({
+            x: this.position.x, 
+            y: this.position.y-20
+        }, source.position, this.knockback);
+        Phaser.Point.normalize(this.knockback, this.knockback);
+
+        // Apply the specific amount of knockback that the source entity applies.
+        this.knockback.setMagnitude(source.knockbackAmount || 0);
+
+        // Zero out current velocity
+        this.body.velocity.set(0);
+
+        Phaser.Point.add(this.body.velocity, this.knockback, this.body.velocity);
+        this.knockback.set(0);
+
+        // Temporarily disable input after knockback.
+        this.knockbackTime = game.time.now + this.knockbackDuration;
+    };
+
     /*
      * Apply damage to the entity.  In addition to decreasing the entity's health
      * by the given amount, this will apply a brief period of invulnerability 
@@ -145,26 +170,13 @@ define([
         // Can currently take damage?
         if(this.invulnerable) return;
 
-        amount = Math.abs(amount || 1);
+        // Apply damage.  Lowest possible damage amount is 0.
+		if (amount < 0) amount = 0;
         this.health -= amount;
         this.events.onDamage.dispatch(this.health, amount);
 
-        // Temporary invulnerability.
-        this.makeInvulnerable();
-
-        // Knockback force
-        Phaser.Point.subtract({x: this.position.x, y: this.position.y-20}, source.position, this.knockback);
-        Phaser.Point.normalize(this.knockback, this.knockback);
-        this.knockback.setMagnitude(500);
-
-        // Zero out current velocity
-        this.body.velocity.set(0);
-
-        Phaser.Point.add(this.body.velocity, this.knockback, this.body.velocity);
-        this.knockback.set(0);
-
-        // Temporarily disable input after knockback.
-        this.knockbackTime = game.time.now + this.knockbackDuration;
+        // If the damage is coming from a specific source, apply knockback.
+        if(source) this.applyKnockBack(source);
         
         if (this.health <= 0) {
             this.handleDeath();

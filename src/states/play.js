@@ -9,7 +9,6 @@ define([
     'worm',
     'dipteranura',
     'egg-sac',
-    'commander-kavosic',
     'platform',
     'object-layer-helper',
     'poop-timer',
@@ -20,9 +19,7 @@ define([
     'health-powerup',
     'food-powerup',
     'checkpoint',
-    'duti-drop',
-    'character-trigger',
-    'levels/test-map-1'
+    'duti-drop'
 ], function (
     Phaser,
     GameGroup,
@@ -34,7 +31,6 @@ define([
     Worm,
     Dipteranura,
     EggSac,
-    CommanderKavosic,
     Platform,
     ObjectLayerHelper,
     PoopTimer,
@@ -45,9 +41,7 @@ define([
     HealthPowerup,
     FoodPowerup,
     Checkpoint,
-    DutiDrop,
-    CharacterTrigger,
-    TestMap1) {
+    DutiDrop) {
 
     'use strict';
     
@@ -65,7 +59,6 @@ define([
         map,
         collisionLayer,
         platforms,
-        characterTriggers,
         enterDoor,
         exitDoor,
         poopTimer,
@@ -74,8 +67,7 @@ define([
         damageDisplay,
         livesDisplay,
         collectables,
-        checkpoints,
-        level;
+        checkpoints;
 
     // Default starting properties/state of the game world. These properties
     // can be overridden by passing a data object to the Play state.
@@ -180,12 +172,6 @@ define([
             game.add.existing(exitDoor);
             game.exitDoor = exitDoor;
 
-            // Insert Commander Kavosic
-            characters = ObjectLayerHelper.createObjectsByType(game, 'commander-kavosic', map, 'characters', CommanderKavosic);
-            //characters.forEach(this.registerEnemyEvents, this);
-            game.add.existing(characters);
-            
-
             // Spawn point
             var spawnPoint = ObjectLayerHelper.createObjectByName(game, 'player_spawn', map, 'spawns');
 
@@ -228,13 +214,6 @@ define([
             // Assign impasasble tiles for collision.
             map.setCollisionByExclusion([], true, 'foreground-structure');
 
-            // Create character plot triggers
-            level = new TestMap1();
-            //game.add.existing(level);
-            characterTriggers = ObjectLayerHelper.createObjectsByType(game, 'character-trigger', map, 'triggers', CharacterTrigger);
-            game.add.existing(characterTriggers);
-
-
             // Platforms
             platforms = new GameGroup(game);
             platforms = ObjectLayerHelper.createObjectsByType(game, 'platform', map, 'platforms', Platform, platforms);
@@ -248,7 +227,7 @@ define([
             game.add.existing(collectables);
             
             // HUD
-            poopTimer = new PoopTimer(game, 0, 0);
+            poopTimer = new PoopTimer(game, map.properties.timer);
             game.add.existing(poopTimer);
             poopTimer.events.onTick.add(this.onPoopTimerTick, this);
             poopTimer.events.onTimeout.add(this.onPoopTimerTimeout, this);
@@ -300,26 +279,12 @@ define([
                 }
             });
             attackKeys = {
-                sword: game.input.keyboard.addKey(Phaser.Keyboard.COMMA),
                 puker: game.input.keyboard.addKey(Phaser.Keyboard.PERIOD),
-                claw: game.input.keyboard.addKey(Phaser.Keyboard.QUESTION_MARK)
             };
-            attackKeys.sword.onDown.add(function () {
-                // Direct input to player if not paused.
-                if (!player.paused) {
-                    player.attackSword();
-                }
-            });
             attackKeys.puker.onDown.add(function () {
                 // Direct input to player if not paused.
                 if (!player.paused) {
                     player.attackPuker();
-                }
-            });
-            attackKeys.claw.onDown.add(function () {
-                // Direct input to player if not paused.
-                if (!player.paused) {
-                    player.attackClaw();
                 }
             });
             game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(function() {
@@ -361,14 +326,8 @@ define([
                             // to fall through a platform, attempt to jump.
                             if(!gamepadJumpAndDownPressed()) player.jump();
                             break;
-                        case Phaser.Gamepad.XBOX360_B:
-                            player.attackSword();
-                            break;
                         case Phaser.Gamepad.XBOX360_X:
                             player.attackPuker();
-                            break;
-                        case Phaser.Gamepad.XBOX360_Y:
-                            player.attackClaw();
                             break;
                         case Phaser.Gamepad.XBOX360_RIGHT_BUMPER:
                             // Check to see if player has reached the exit door.
@@ -412,7 +371,6 @@ define([
         },
 
         render: function () {
-            //var body = player.weapons.sword.getCollidables();
             //if(body) game.debug.body(body);
             /*)enemies.forEach(function (enemy) {
                 if (enemy.behavior.hunter) game.debug.geom(enemy.behavior.hunter.lineHunting);
@@ -443,14 +401,8 @@ define([
                     game.physics.arcade.collide(currentWeapon.getCollidables(), collisionLayer, currentWeapon.onHitTerrain);
                 }
     
-                // Check to see if weapons are colliding with collectables.
-                game.physics.arcade.overlap(player.weapons.clawArm.getCollidables(), collectables, currentWeapon.onHit);
-    
                 // Collide player + enemies.
                 game.physics.arcade.overlap(player, enemies, this.onPlayerCollidesEnemy);
-                
-                // Check overlap of player + character triggers.
-                game.physics.arcade.overlap(player, characterTriggers, this.onPlayerOverlapCharacterTrigger);
                 
                 // Collide player + collectables.
                 game.physics.arcade.overlap(player, collectables, this.onPlayerCollidesCollectable);
@@ -537,20 +489,15 @@ define([
             if (enemy.events.onSpawnChild) enemy.events.onSpawnChild.add(this.onSpawnerSpawn, this);
         },
         
-        onPlayerOverlapCharacterTrigger: function (player, characterTrigger) {
-            characters.forEach( function(character) {
-                if (character.name === characterTrigger.properties.characterTriggerTarget) {
-                    level.handleTrigger(character, characterTrigger.properties.key, characterTrigger.properties);
-                }
-            });
-        },
-        
         onSpawnerSpawn: function(spawner, sprite) {
             this.registerEnemyEvents(sprite);
         },
         
         onPlayerCollidesEnemy: function (player, enemy) {
-            if(!enemy.invulnerable && !enemy.dying) player.damage(0.5, enemy);
+            if(!enemy.invulnerable && !enemy.dying) {
+                // Enemies don't do lethal damage; just knockback.
+                player.damage(0, enemy);
+            }
         },
 
         onPlayerCollidesCheckpoint: function (player, checkpoint) {
