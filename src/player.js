@@ -1,12 +1,11 @@
 define([
     'phaser',
     'entity',
-    'sword',
     'player-head',
     'claw-arm',
     'speech-bubble',
     'utilities/state-machine'
-], function (Phaser, Entity, Sword, PlayerHead, ClawArm, SpeechBubble, StateMachine) { 
+], function (Phaser, Entity, PlayerHead, ClawArm, SpeechBubble, StateMachine) { 
     'use strict';
 
     // Shortcuts
@@ -74,11 +73,9 @@ define([
         // Equip weapons
         this.weapons = [];
 
-        this.weapons.sword   = new Sword(game, 0, 0);
         this.weapons.head     = new PlayerHead(game, 0, 2);
         this.weapons.clawArm = new ClawArm(game, 0, 0);
 
-        this.weapons.push(this.weapons.sword);
         this.weapons.push(this.weapons.head);
         this.weapons.push(this.weapons.clawArm);
 
@@ -174,6 +171,11 @@ define([
             this.weapons[0].use();
         }
     };
+    
+    Player.prototype.attackClaw = function () {
+       this.weapons[2].use();
+    };
+ 
 
     Player.prototype.onPukerPuke = function () {
         this.fullness--;
