@@ -1,10 +1,11 @@
 define([
     'phaser',
     'entity',
-    'puker',
+    'player-head',
+    'claw-arm',
     'speech-bubble',
     'utilities/state-machine'
-], function (Phaser, Entity, Puker, SpeechBubble, StateMachine) { 
+], function (Phaser, Entity, PlayerHead, ClawArm, SpeechBubble, StateMachine) { 
     'use strict';
 
     // Shortcuts
@@ -71,14 +72,18 @@ define([
 
         // Equip weapons
         this.weapons = [];
-        this.weapons.puker     = new Puker(game, 20, 14);
-        this.weapons.push(this.weapons.puker);
+
+        this.weapons.head     = new PlayerHead(game, 0, 2);
+        this.weapons.clawArm = new ClawArm(game, 0, 0);
+
+        this.weapons.push(this.weapons.head);
+        this.weapons.push(this.weapons.clawArm);
 
         for(var i=0; i<this.weapons.length; i++) {
             this.addChild(this.weapons[i]);
         }
         
-        this.weapons.puker.events.onPuke.add(this.onPukerPuke, this);
+        this.weapons.head.puker.events.onPuke.add(this.onPukerPuke, this);
 
         this.maxMoveSpeed = new Phaser.Point(300, 10000);
 
@@ -166,6 +171,11 @@ define([
             this.weapons[0].use();
         }
     };
+    
+    Player.prototype.attackClaw = function () {
+       this.weapons[2].use();
+    };
+ 
 
     Player.prototype.onPukerPuke = function () {
         this.fullness--;

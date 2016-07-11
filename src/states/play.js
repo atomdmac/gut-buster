@@ -280,11 +280,18 @@ define([
             });
             attackKeys = {
                 puker: game.input.keyboard.addKey(Phaser.Keyboard.PERIOD),
+                claw: game.input.keyboard.addKey(Phaser.Keyboard.QUESTION_MARK)
             };
             attackKeys.puker.onDown.add(function () {
                 // Direct input to player if not paused.
                 if (!player.paused) {
                     player.attackPuker();
+                }
+            });
+            attackKeys.claw.onDown.add(function () {
+                // Direct input to player if not paused.
+                if (!player.paused) {
+                    player.attackClaw();
                 }
             });
             game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(function() {
@@ -294,6 +301,7 @@ define([
                     game.scale.startFullScreen();
                 }
             });
+
             game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(function () {
                 // Direct input to player if not paused.
                 if (!player.paused) {

@@ -71,6 +71,7 @@ define([
 
             this.game.load.spritesheet('porta-potty', 'assets/sprites/porta-potty.png', 64, 64, 14);
             this.game.load.atlas('player', 'assets/sprites/blobman.png', 'assets/sprites/blobman.json');
+            this.game.load.atlas('player-head', 'assets/sprites/blobman-head.png', 'assets/sprites/blobman-head.json');
             this.game.load.spritesheet('spawner', 'assets/sprites/spawner.png', 32, 32, 1);
             this.game.load.spritesheet('enemy', 'assets/sprites/enemy.png', 33, 27, 1);
             this.game.load.atlas('dipteranura', 'assets/sprites/dipteranura.png', 'assets/sprites/dipteranura.json');
