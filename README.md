@@ -1,4 +1,4 @@
 
-# Platform-Demo
+# Git Buster
 
-A platformer inspired by the Megaman series, among other things.
+A gross platformer inspired by the Megaman series.
