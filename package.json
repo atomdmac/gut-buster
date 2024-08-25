@@ -1,0 +1,12 @@
+{
+  "name": "Gut Buster",
+  "version": "0.1.0",
+  "description": "A gross game about using your puke for justice.",
+  "authors": [
+    "Atom Mac <atom.mac@gmail.com>",
+    "Zach Bennett"
+  ],
+  "license": "MIT",
+  "dependencies": {},
+  "ignore": []
+}
