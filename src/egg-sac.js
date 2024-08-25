@@ -210,12 +210,6 @@ define([
     EggSac.prototype.handleDeath = function () {
         this.events.onDeath.dispatch(this);
 
-        // Drop loot.
-        if (Math.random() < 0.5) {
-            var healthPowerup = new HealthPowerup(game, this.x, this.y);
-            this.events.onDrop.dispatch(this, healthPowerup);
-        }
-
         this.body.checkCollision.up = false;
         this.body.checkCollision.down = false;
         this.body.checkCollision.left = false;

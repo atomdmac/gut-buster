@@ -1,0 +1,107 @@
+{ "frames": {
+   "puke 0.ase": {
+    "frame": { "x": 1, "y": 1, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 1.ase": {
+    "frame": { "x": 68, "y": 1, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 2.ase": {
+    "frame": { "x": 135, "y": 1, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 3.ase": {
+    "frame": { "x": 202, "y": 1, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 4.ase": {
+    "frame": { "x": 269, "y": 1, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 5.ase": {
+    "frame": { "x": 336, "y": 1, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 6.ase": {
+    "frame": { "x": 403, "y": 1, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 7.ase": {
+    "frame": { "x": 1, "y": 36, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 8.ase": {
+    "frame": { "x": 68, "y": 36, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 9.ase": {
+    "frame": { "x": 135, "y": 36, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 10.ase": {
+    "frame": { "x": 202, "y": 36, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   },
+   "puke 11.ase": {
+    "frame": { "x": 269, "y": 36, "w": 66, "h": 34 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 32 },
+    "sourceSize": { "w": 64, "h": 32 },
+    "duration": 150
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.1.0.1",
+  "image": "E:\\LightTPD\\htdocs\\platformer-demo\\assets\\sprites\\puke.png",
+  "format": "RGBA8888",
+  "size": { "w": 512, "h": 128 },
+  "scale": "1"
+ }
+}

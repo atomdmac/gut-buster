@@ -1,39 +1,28 @@
 define([
     'phaser',
+    'entity',
     'health-powerup',
+    'food-powerup',
     'utilities/state-machine'
-], function (Phaser, HealthPowerup, StateMachine) { 
+], function (Phaser, Entity, HealthPowerup, FoodPowerup, StateMachine) { 
     'use strict';
 
     // Shortcuts
     var game, self, sightLine;
 
     function Cthulbat (_game, x, y) {
-        // DEBUG
-        window.bat = this;
-        window.game = _game;
 
         game = _game;
         self = this;
 
         // Initialize sprite
-        Phaser.Sprite.call(this, game, x, y, 'enemy');
-        this.anchor.set(0.5);
+        Entity.call(this, game, x, y, 'enemy');
 
-        // Which way is the dude or dudette facing?
-        this.facing = 'right';
-
-        // Enable physics.
-        game.physics.enable(this);
-        this.body.allowGravity = false;
-        this.body.collideWorldBounds = true;
+        // Set up physics.
         this.body.checkCollision.up = false;
         this.body.checkCollision.down = false;
         this.body.checkCollision.left = false;
         this.body.checkCollision.right = false;
-        
-        this.checkWorldBounds = true;
-        this.outOfBoundsKill = true;
 
         // Initialize public properites.
         // Fastest possible movement speeds.
@@ -50,20 +39,6 @@ define([
      
         // Initial health.
         this.health = this.maxHealth = 2;
-
-        // Invulnerability
-        this.invulnerable = false;
-        this.invulnerableTimer = 0;
-
-        // Knockback
-        this.knockback = new Phaser.Point();
-        this.knockbackTimeout = game.time.now;
-
-        // Signals
-        this.events.onHeal = new Phaser.Signal();
-        this.events.onDamage = new Phaser.Signal();
-        this.events.onDeath = new Phaser.Signal();
-        this.events.onDrop = new Phaser.Signal();
 
         // AI
         this.distanceToTarget = new Phaser.Point();
@@ -104,19 +79,7 @@ define([
         
     }
 
-    function onBlinkLoop (){
-        if(game.time.now - this.invulnerableTimer > 500) {
-            this.blinkTween.start(0);
-            this.blinkTween.pause();
-            this.invulnerable = false;
-            this.alpha = 1;
-            if (!this.alive) {
-                this.kill();
-            }
-        }
-    }
-
-    Cthulbat.prototype = Object.create(Phaser.Sprite.prototype);
+    Cthulbat.prototype = Object.create(Entity.prototype);
     Cthulbat.prototype.constructor = Cthulbat;
 
     Cthulbat.prototype.update = function () {
@@ -131,28 +94,9 @@ define([
         if(this.alive && !this.dying && !this.invulnerable) {
             this.stateMachine.handle('update');
         }
-
-        // Update direction
-        if (this.facing === 'right') {
-            this.scale.x = 1; //facing default direction
-        }
-        else {
-            this.scale.x = -1; //flipped
-        }
         
         // Call up!
-        Phaser.Sprite.prototype.update.call(this);
-        
-        if (this.alive) {
-            if (!this.inCamera) {
-                // Auto-kill if off camera for too long.
-                this.offCameraKillTimer.add(2000, this.kill, this);
-            }
-            else {
-                // Cancel auto-kill if returned to the camera.
-                this.offCameraKillTimer.removeAll();
-            }
-        }
+        Entity.prototype.update.call(this);
     };
     
     Cthulbat.prototype.update_idle = function () {
@@ -223,13 +167,13 @@ define([
         Phaser.Point.subtract(this.huntTarget.position, this.position, this.distanceToTarget);
         if(this.distanceToTarget.getMagnitude() < this.distanceToAttacking) {
             // Move to the enemy or where the player was last seen.
-            if(this.distanceToTarget.x > 8) {
+            if(this.distanceToTarget.x >= 8) {
                 this.moveRight();
                 Phaser.Point.negative(this.body.acceleration, this.body.acceleration);
                 if(this.body.acceleration.y > 0) this.body.acceleration.y *= -1;
             } 
     
-            else if(this.distanceToTarget.x < -8) {
+            else if(this.distanceToTarget.x <= -8) {
                 this.moveLeft();
                 Phaser.Point.negative(this.body.acceleration, this.body.acceleration);
                 if(this.body.acceleration.y > 0) this.body.acceleration.y *= -1;
@@ -258,11 +202,19 @@ define([
             this.stateMachine.setState('idle');
         }
     };
+
+    Cthulbat.prototype.damage = function (amount, source) {
+        // Cancel the rest of the swoop.
+        this.onSwoopComplete();
+
+        // Call up to super class.
+        Entity.prototype.damage.call(this, amount, source);
+    };
     
 
     Cthulbat.prototype.revive = function () {
         // Call up!
-        Phaser.Sprite.prototype.revive.call(this, this.maxHealth);
+        Entity.prototype.revive.call(this, this.maxHealth);
         
         // Zero out all movement.
         this.body.acceleration.set(0);
@@ -279,61 +231,22 @@ define([
         this.stateMachine.setState('idle');
     };
 
-    Cthulbat.prototype.damage = function (amount, source) {
-
-        // Can currently take damage?
-        if(this.invulnerable) return;
-
-        this.stopSwoop();
-
-        amount = Math.abs(amount || 1);
-        this.health -= amount;
-        this.events.onDamage.dispatch(this.health, amount);
-
-        // Temporary invulnerability.
-        this.invulnerable = true;
-        this.invulnerableTimer = game.time.now;
-        
-        // Visual feedback to show player was hit and is currently invulnerable.
-        this.blinkTween = game.add.tween(this);
-        this.blinkTween.to({alpha: 0}, 80, null, true, 0, -1, true);
-        this.blinkTween.onLoop.add(onBlinkLoop, this);
-
-        // Knockback force
-        Phaser.Point.subtract({x: this.position.x, y: this.position.y-20}, source.position, this.knockback);
-        Phaser.Point.normalize(this.knockback, this.knockback);
-        this.knockback.setMagnitude(500);
-
-        // Zero out current velocity
-        this.body.velocity.set(0);
-
-        Phaser.Point.add(this.body.velocity, this.knockback, this.body.velocity);
-        this.knockback.set(0);
-
-        // Temporarily disable input after knockback.
-        this.knockbackTimeout = game.time.now + 500;
-        
-        if (this.health <= 0) {
-            this.handleDeath();
-        }
-    };
-
     Cthulbat.prototype.moveLeft = function () {
         // Temporarily disable input after knockback.
-        if(this.knockbackTimeout > game.time.now) return;
+        if(this.knockbackTime > game.time.now) return;
 
         this.body.acceleration.set(0);
         game.physics.arcade.accelerateToObject(this, game.player, this.moveAccel, this.body.maxVelocity.x, this.body.maxVelocity.y);
-        this.facing = 'left';
+        this.flip(-1);
     };
 
     Cthulbat.prototype.moveRight = function () {
         // Temporarily disable input after knockback.
-        if(this.knockbackTimeout > game.time.now) return;
+        if(this.knockbackTime > game.time.now) return;
         
         this.body.acceleration.set(0);
         game.physics.arcade.accelerateToObject(this, game.player, this.moveAccel, this.body.maxVelocity.x, this.body.maxVelocity.y);
-        this.facing = 'right';
+        this.flip(1);
     };
 
     Cthulbat.prototype.stopMoving = function () {
@@ -341,19 +254,24 @@ define([
     };
     
     Cthulbat.prototype.handleDeath = function () {
-        this.events.onDeath.dispatch(this);
 
         // Drop loot.
-        if (Math.random() < 0.5) {
-            var healthPowerup = new HealthPowerup(game, this.x, this.y);
-            this.events.onDrop.dispatch(this, healthPowerup);
+        if (Math.random() < 0.10) {
+            this.events.onDrop.dispatch(
+                this, 
+                new HealthPowerup(game, this.x, this.y-this.height)
+            );
+        }
+
+        else if(Math.random() < 0.5) {
+            this.events.onDrop.dispatch(
+                this, 
+                new FoodPowerup(game, this.x, this.y-this.height)
+            );
         }
 
         // If in the process of swooping, stop it.
         this.stopSwoop();
-
-        // Enemy is now in the process of dying.
-        this.dying = true;
 
         // Modify drag and max velocity to allow enemy to fall while dying.
         this.body.drag.y = 0;
@@ -362,11 +280,8 @@ define([
         // Stop trying to fly.
         this.body.allowGravity = true;
 
-    };
+        Entity.prototype.handleDeath.call(this);
 
-    Cthulbat.prototype.kill = function () {
-        this.dying = false;
-        Phaser.Sprite.prototype.kill.apply(this, arguments);
     };
 
     return Cthulbat;

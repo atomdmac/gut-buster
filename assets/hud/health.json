@@ -1,0 +1,35 @@
+{ "frames": {
+   "health 0.ase": {
+    "frame": { "x": 0, "y": 0, "w": 26, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 26, "h": 26 },
+    "sourceSize": { "w": 26, "h": 26 },
+    "duration": 100
+   },
+   "health 1.ase": {
+    "frame": { "x": 26, "y": 0, "w": 26, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 26, "h": 26 },
+    "sourceSize": { "w": 26, "h": 26 },
+    "duration": 100
+   },
+   "health 2.ase": {
+    "frame": { "x": 52, "y": 0, "w": 26, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 26, "h": 26 },
+    "sourceSize": { "w": 26, "h": 26 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.1.1",
+  "image": "/Users/atommac/Code/platformer-demo/assets/hud/health.png",
+  "format": "RGBA8888",
+  "size": { "w": 78, "h": 26 },
+  "scale": "1"
+ }
+}

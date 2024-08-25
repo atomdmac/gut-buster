@@ -1,6 +1,7 @@
 define([
-    'phaser'
-], function (Phaser) { 
+    'phaser',
+    'game-sprite'
+], function (Phaser, GameSprite) { 
     'use strict';
 
     var game, self;
@@ -9,7 +10,7 @@ define([
         game = _game;
         self = this;
         
-        Phaser.Sprite.call(this, game, x, y, key, frame);
+        GameSprite.call(this, game, x, y, key, frame);
 
         // Whether or not this weapon is currently in use.
         this.inUse = false;
@@ -22,15 +23,8 @@ define([
 
     }
 
-    Weapon.prototype = Object.create(Phaser.Sprite.prototype);
+    Weapon.prototype = Object.create(GameSprite.prototype);
     Weapon.prototype.constructor = Weapon;
-
-    Weapon.prototype.update = function () {
-        if (game.time.now > this.useTimeout + this.useRate) {
-            this.inUse = false;
-        }
-        Phaser.Sprite.prototype.update.call(this);
-    };
 
     // Return one or more items that can be collided with to cause damage.
     Weapon.prototype.getCollidables = function () {

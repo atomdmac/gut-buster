@@ -70,14 +70,46 @@
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 24 },
     "sourceSize": { "w": 48, "h": 24 },
     "duration": 100
+   },
+   "velma-worm 9.ase": {
+    "frame": { "x": 205, "y": 28, "w": 50, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 24 },
+    "sourceSize": { "w": 48, "h": 24 },
+    "duration": 100
+   },
+   "velma-worm 10.ase": {
+    "frame": { "x": 1, "y": 55, "w": 50, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 24 },
+    "sourceSize": { "w": 48, "h": 24 },
+    "duration": 100
+   },
+   "velma-worm 11.ase": {
+    "frame": { "x": 52, "y": 55, "w": 50, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 24 },
+    "sourceSize": { "w": 48, "h": 24 },
+    "duration": 100
+   },
+   "velma-worm 12.ase": {
+    "frame": { "x": 103, "y": 55, "w": 50, "h": 26 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 24 },
+    "sourceSize": { "w": 48, "h": 24 },
+    "duration": 100
    }
  },
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.1.0.1",
-  "image": "E:\\LightTPD\\htdocs\\platformer-demo\\assets\\sprites\\velma-worm.png",
+  "version": "1.1.1",
+  "image": "J:\\LightTPD\\htdocs\\platformer-demo\\assets\\sprites\\velma-worm.png",
   "format": "RGBA8888",
-  "size": { "w": 256, "h": 64 },
+  "size": { "w": 256, "h": 128 },
   "scale": "1"
  }
 }

@@ -12,6 +12,8 @@ define([
 
         // Initialize sprite
         Phaser.Sprite.call(this, game, x, y, 'spawner');
+
+        this.renderable = false;
         
         // Spawn settings
         this.maxSpawned = 1;

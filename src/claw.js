@@ -14,7 +14,7 @@ define([
 
         this.debug = true;
 
-        this.speed = 500;
+        this.speed = 1000;
         this.revive();
 
         game.physics.enable(this);
@@ -33,17 +33,13 @@ define([
     Claw.prototype.fire = function (direction) {
         this.body.velocity.y = 0;
         switch(direction) {
-            case 'left':
+            case -1:
                 this.scale.x = -1; //flipped
                 this.body.velocity.x = -this.speed;
                 break;
-            case 'right':
+            case 1:
                 this.scale.x = 1; //facing default direction
                 this.body.velocity.x = this.speed;
-                break;
-            case 'up':
-                break;
-            case 'down':
                 break;
         }
 

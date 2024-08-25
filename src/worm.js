@@ -1,32 +1,59 @@
 define([
     'phaser',
+    'entity',
     'health-powerup',
+    'food-powerup',
+    'utilities/state-machine',
     'behaviors/pacer'
-], function (Phaser, HealthPowerup, Pacer) { 
+], function (Phaser, Entity, HealthPowerup, FoodPowerup, StateMachine, Pacer) { 
     'use strict';
 
     // Shortcuts
-    var game, self, sightLine;
+    var game, self;
 
-    function Worm (_game, x, y) {
+    function Worm (_game, x, y, state) {
         game = _game;
         self = this;
 
         // Initialize sprite
-        Phaser.Sprite.call(this, game, x, y, 'velma-worm');
-        this.anchor.set(0.5);
+        Entity.call(this, game, x, y, 'velma-worm');
         
         this.animations.add('walk', [0,1,2,3,4,5], 5);
-       // this.animations.add('attack', [4,5,6]);
+       // this.animations.add('attack', [6,7,8], 5);
+        this.animations.add('flying', [9,10,11,12], 5);
 
+        this.bodyFrameData = [
+            [46,4,1,19],
+            [23,16,20,7],
+            [26,3,17,20],
+            [26,3,17,20],
+            [23,16,20,7],
+            [46,4,1,19],
+            [],
+            [],
+            [],
+            [17,13,16,5],
+            [13,17,17,3],
+            [17,13,14,5],
+            [13,17,15,3]
+        ];
+        
+        // State machine for managing behavior states.
+        StateMachine.extend(this);
+        this.stateMachine.onStateChange.add(this.onSelfChangeState, this);
+        this.stateMachine.states = {
+            'flying': {
+                'update': this.update_flying
+            },
+            'walking': {
+                'update': this.update_walking
+            }
+        };
+        // Spawn in idle state.
+        this.stateMachine.setState('walking');
+        
         // Which way is the dude or dudette facing?
         this.facing = 'right';
-
-        // Enable physics.
-        game.physics.enable(this);
-        this.body.collideWorldBounds = true;
-        this.checkWorldBounds = true;
-        this.outOfBoundsKill = true;
 
         // Initialize public properites.
         // Fastest possible movement speeds.
@@ -37,69 +64,30 @@ define([
         
         // Initial health.
         this.health = this.maxHealth = 1;
-
-        // Initial jump speed
-        this.jumpSpeed = 500;
+        
         // The horizontal acceleration that is applied when moving.
-        this.moveAccel = 1200;
-
-        // Invulnerability
-        this.invulnerable = false;
-        this.invulnerableTimer = 0;
-
-        // Knockback
-        this.knockback = new Phaser.Point();
-        this.knockbackTimeout = game.time.now;
-
-        // Signals
-        this.events.onHeal = new Phaser.Signal();
-        this.events.onDamage = new Phaser.Signal();
-        this.events.onDeath = new Phaser.Signal();
-        this.events.onDrop = new Phaser.Signal();
-
-        // AI
-        this.targetPosition = new Phaser.Point();
-        this.sightLine = new Phaser.Line();
-        this.maxMoveSpeed = new Phaser.Point(75, 1000);
-        this.bearing = new Phaser.Point();
-        this.distanceToPlayer = new Phaser.Point();
-
-        this.knockback = new Phaser.Point();
-        this.knockbackTimeout = 0;
-
-        this.behavior = {
-            pacer: new Pacer(this, game.player)
-        };
-        
-        this.offCameraKillTimer = game.time.create(false);
-        this.offCameraKillTimer.start(); 
-        
+        this.moveAccel = 700;
     }
 
-    function onBlinkLoop (){
-        if(game.time.now - this.invulnerableTimer > 500) {
-            this.blinkTween.start(0);
-            this.blinkTween.pause();
-            this.invulnerable = false;
-            this.alpha = 1;
-            if (!this.alive) {
-                this.kill();
-            }
-        }
-    }
-
-    Worm.prototype = Object.create(Phaser.Sprite.prototype);
+    Worm.prototype = Object.create(Entity.prototype);
     Worm.prototype.constructor = Worm;
 
     Worm.prototype.update = function () {
-
-        Phaser.Point.subtract(game.player.position, this.position, this.distanceToPlayer);
+    
+        // Adjust body to match animation frame.
+        var bfd = this.bodyFrameData[this.animations.frame];
+        this.body.setSize(bfd[0],
+                          bfd[1],
+                          bfd[2]*this.anchor.x*this.scale,
+                          bfd[3]*this.anchor.y);
 
         // Don't continue to accelerate unless force is applied.
         this.stopMoving();
 
         // Apply behaviors.
-        this.behavior.pacer.update();
+        if(this.alive && !this.dying && !this.invulnerable) {
+            this.stateMachine.handle('update');
+        }
 
         // Update direction
         if (this.facing === 'right') {
@@ -110,24 +98,52 @@ define([
         }
         
         // Call up!
-        Phaser.Sprite.prototype.update.call(this);
+        Entity.prototype.update.call(this);
+    };
+    
+    Worm.prototype.onSelfChangeState = function (sm, stateName) {
+        if (stateName === 'flying') {
+            this.animations.play('flying', null, true);
+            this.body.drag.x = 100;
+        }
+        else if (stateName === 'walking') {
+            this.body.drag.x = 800;
+        }
+    };
+    
+    Worm.prototype.update_flying = function () {
+        if (this.body.blocked.down) {
+            this.stateMachine.setState('walking');
+        }
+    };
+    
+    Worm.prototype.update_walking = function () {
+        // Play animation.
+        this.animations.play('walk');
         
-        if (this.alive) {
-            
-            if (!this.inCamera) {
-                // Auto-kill if off camera for too long.
-                this.offCameraKillTimer.add(2000, this.kill, this);
+		// Face away from any walls touched.
+        if(this.body.onWall()) {
+            if (this.body.blocked.left) {
+                this.facing = 'right';
             }
+            // Face normally.
             else {
-                // Cancel auto-kill if returned to the camera.
-                this.offCameraKillTimer.removeAll();
+                this.facing = 'left';
             }
+        }
+        
+        // Accelerate on certain frame of animation.
+        if (this.animations.frame === 4) {
+            this.body.acceleration.x = this.moveAccel * this.scale.x;
         }
     };
 
-    Worm.prototype.revive = function () {
+    Worm.prototype.revive = function (health, state) {
         // Call up!
-        Phaser.Sprite.prototype.revive.call(this);
+        Entity.prototype.revive.call(this, health);
+        
+        state = state ? state : 'walking';
+        this.stateMachine.setState(state);
         
         this.body.checkCollision.up = true;
         this.body.checkCollision.down = true;
@@ -135,158 +151,34 @@ define([
         this.body.checkCollision.right = true;
     };
 
-    Worm.prototype.canSee = function (target, line) {
-        line.start.x = this.x;
-        line.start.y = this.y;
-        line.end.x = target.x;
-        line.end.y = target.y;
-        var tiles = game.collisionLayer.getRayCastTiles(line, null, true);
-
-        if(tiles.length) return false;
-        return true;
-    };
-
-    Worm.prototype.damage = function (amount, source) {
-
-        // Can currently take damage?
-        if(this.invulnerable) return;
-
-        amount = Math.abs(amount || 1);
-        this.health -= amount;
-        this.events.onDamage.dispatch(this.health, amount);
-
-        // Temporary invulnerability.
-        this.invulnerable = true;
-        this.invulnerableTimer = game.time.now;
-        
-        // Visual feedback to show player was hit and is currently invulnerable.
-        this.blinkTween = game.add.tween(this);
-        this.blinkTween.to({alpha: 0}, 80, null, true, 0, -1, true);
-        this.blinkTween.onLoop.add(onBlinkLoop, this);
-
-        // Knockback force
-        Phaser.Point.subtract({x: this.position.x, y: this.position.y-20}, source.position, this.knockback);
-        Phaser.Point.normalize(this.knockback, this.knockback);
-        this.knockback.setMagnitude(500);
-
-        // Zero out current velocity
-        this.body.velocity.set(0);
-
-        Phaser.Point.add(this.body.velocity, this.knockback, this.body.velocity);
-        this.knockback.set(0);
-
-        // Temporarily disable input after knockback.
-        this.knockbackTimeout = game.time.now + 500;
-        
-        if (this.health === 0) {
-            this.handleDeath();
-        }
-    };
-
-    Worm.prototype.shouldJump = function () {
-        // If the player is higher than enemy and enemy...
-        if(game.player.position.y+game.player.height < this.position.y+this.height) return true;
-
-        // If player is within attack range, there is a 5% change enemy will jump;
-        if(this.distanceToPlayer.getMagnitude() < 64 && Math.random() < 0.05) return true;
-
-        // ...else don't jump.
-        return false;
-    };
-    
-    Worm.prototype.jump = function () {
-        // Temporarily disable input after knockback.
-        if(this.knockbackTimeout > game.time.now) return;
-        
-        // Normal jumping
-        if(this.body.onFloor() || this.body.touching.down) {
-            this.body.velocity.y = -this.jumpSpeed;
-        }
-
-        // Wall jumping.
-        if(this.body.onWall() && this.body.blocked.left) {
-            this.body.velocity.y = -this.jumpSpeed;
-            this.body.velocity.x = this.maxMoveSpeed.x; // TODO: Find a more appropriate way to calculate vx when wall jumping.
-        }
-
-        if(this.body.onWall() && this.body.blocked.right) {
-            this.body.velocity.y = -this.jumpSpeed;
-            this.body.velocity.x = -this.maxMoveSpeed.x; // TODO: Find a more appropriate way to calculate vx when wall jumping.
-        }
-    };
-
-    Worm.prototype.moveLeft = function () {
-        // Temporarily disable input after knockback.
-        if(this.knockbackTimeout > game.time.now) return;
-
-        if(this.body.velocity.x <=  -this.maxMoveSpeed.x) this.body.velocity.x = -this.maxMoveSpeed.x;
-        
-        this.animations.play('walk');
-        
-        // Face away from wall.
-        if(this.body.onWall() && this.body.blocked.left) {
-            this.facing = 'right';
-        }
-        // Face normally.
-        else {
-            this.facing = 'left';
-        }
-        
-        // Wait for drag to stop us if switching directions.
-        if (this.body.acceleration.x > 0) {
-            this.body.acceleration.x = 0;
-        }
-        if (this.body.velocity.x <= 0 && this.animations.frame === 4) {
-            this.body.acceleration.x = -this.moveAccel;
-        }
-    };
-
-    Worm.prototype.moveRight = function () {
-        // Temporarily disable input after knockback.
-        if(this.knockbackTimeout > game.time.now) return;
-
-        if(this.body.velocity.x >= this.maxMoveSpeed.x) this.body.velocity.x = this.maxMoveSpeed.x;
-        
-        this.animations.play('walk');
-        
-        // Face away from wall and slide down wall slowly.
-        if(this.body.onWall() && this.body.blocked.right) {
-            this.facing = 'left';
-            if (this.body.velocity.y > 0) {
-                this.body.velocity.y = 50;
-            }
-        }
-        // Face normally and fall normally.
-        else {
-            this.facing = 'right';
-        }
-        
-        // Wait for drag to stop us if switching directions.
-        if (this.body.acceleration.x < 0) {
-            this.body.acceleration.x = 0;
-        }
-        if (this.body.velocity.x >= 0 && this.animations.frame === 4) {
-            this.body.acceleration.x = this.moveAccel;
-        }
-    };
-
     Worm.prototype.stopMoving = function () {
         this.body.acceleration.x = 0;
     };
     
     Worm.prototype.handleDeath = function () {
-        this.events.onDeath.dispatch(this);
-
         // Drop loot.
-        if (Math.random() < 0.5) {
-            var healthPowerup = new HealthPowerup(game, this.x, this.y);
-            this.events.onDrop.dispatch(this, healthPowerup);
+        if (Math.random() < 0.05) {
+            this.events.onDrop.dispatch(
+                this, 
+                new HealthPowerup(game, this.x, this.y-this.height)
+            );
         }
 
+        else if(Math.random() < 0.1) {
+            this.events.onDrop.dispatch(
+                this, 
+                new FoodPowerup(game, this.x, this.y-this.height)
+            );
+        }
+        
+        this.stateMachine.setState('flying');
+        
         this.body.checkCollision.up = false;
         this.body.checkCollision.down = false;
         this.body.checkCollision.left = false;
         this.body.checkCollision.right = false;
+        
+        Entity.prototype.handleDeath.apply(this);
     };
 
     return Worm;

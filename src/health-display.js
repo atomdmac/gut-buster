@@ -5,53 +5,52 @@ define([
 
     var game;
 
-    function HealthDisplay (_game, x, y, leftCapKey, middleKey, rightCapKey, fillKey) {
+    function HealthDisplay (_game, x, y) {
+
         game = _game;
 
         Phaser.Group.call(this, game);
-        
-        this.maxFill = 5;
-        this.widthPerHealth = 2;
-        
-        this.leftCap = this.create(0,0,leftCapKey);
-        this.middle = this.create(this.leftCap.x+this.leftCap.width,0,middleKey);
-        this.rightCap = this.create(this.middle.x+this.middle.width,0,rightCapKey);
-        this.setMaxHealth(this.maxFill);
-        
-        this.fillKey = fillKey;
-        
-        this.fillGroup = game.add.group();
-        this.add(this.fillGroup);
 
-        // Lock to camera
+        // Max number of lives to draw (default).
+        this.maxHealth = 3;
+
+        // Child groups.
+        this.health = new Phaser.Group(_game, this);
+
+        // Lock to camera.
         this.fixedToCamera = true;
-        this.cameraOffset.x = 20;
-        this.cameraOffset.y = 20;
+        this.cameraOffset.x = 8;
+        this.cameraOffset.y = 8;
 
     }
 
     HealthDisplay.prototype = Object.create(Phaser.Group.prototype);
     HealthDisplay.prototype.constructor = HealthDisplay;
 
-    HealthDisplay.prototype.updateDisplay = function (amount, total) {
+    HealthDisplay.prototype.updateDisplay = function (amount) {
+
         var i, sprite;
-        this.fillGroup.callAll('kill');
-        for(i=0; i<amount; i++) {
-            sprite = this.getFirstDead();
-            if(sprite) {
-                sprite.revive();
+        this.health.callAll('kill');
+        for(i=0; i<this.maxHealth; i++) {
+            sprite = this.health.getFirstDead(true, 0, 0, 'health');
+            
+            if(i+0.5 < amount) {
+                sprite.frame = 0;
+            } else if (i < amount) {
+                sprite.frame = 1;
             } else {
-                sprite = this.fillGroup.create(0,0,this.fillKey);
+                sprite.frame = 2;
             }
-            sprite.x = this.middle.x + i * sprite.width;
+            sprite.revive();
+
+            sprite.x = (i * sprite.width + 5);
             sprite.y = 4;
         }
+
     };
-    
+
     HealthDisplay.prototype.setMaxHealth = function (amount) {
-        this.maxFill = amount;
-        this.middle.width = this.maxFill * this.widthPerHealth;
-        this.rightCap.x = this.middle.x+this.middle.width;
+        this.maxHealth = amount;
     };
 
     return HealthDisplay;

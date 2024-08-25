@@ -1,25 +1,89 @@
 define([
     'phaser',
+    'game-group',
     'player',
+    'pause-menu',
     'spawner',
     'enemy',
     'cthulbat',
     'worm',
     'dipteranura',
     'egg-sac',
-    'villager',
-    'commander-kavosic',
     'platform',
     'object-layer-helper',
+    'poop-timer',
     'health-display',
+    'stomach-meter',
+    'damage-display',
+    'lives-display',
     'health-powerup',
-    'character-trigger',
-    'levels/test-map-1'
-], function (Phaser, Player, Spawner, Enemy, Cthulbat, Worm, Dipteranura, EggSac, Villager, CommanderKavosic, Platform, ObjectLayerHelper, HealthDisplay, HealthPowerup, CharacterTrigger, TestMap1) { 
-    'use strict';
+    'food-powerup',
+    'checkpoint',
+    'duti-drop'
+], function (
+    Phaser,
+    GameGroup,
+    Player,
+    PauseMenu,
+    Spawner,
+    Enemy,
+    Cthulbat,
+    Worm,
+    Dipteranura,
+    EggSac,
+    Platform,
+    ObjectLayerHelper,
+    PoopTimer,
+    HealthDisplay,
+    StomachMeter,
+    DamageDisplay,
+    LivesDisplay,
+    HealthPowerup,
+    FoodPowerup,
+    Checkpoint,
+    DutiDrop) {
 
+    'use strict';
+    
     // Shortcuts
-    var game, moveKeys, pad1, player, spawners, enemies, villagers, characters, map, collisionLayer, platforms, characterTriggers, exitDoor, healthDisplay, collectables, level;
+    var game, 
+        playState, 
+        moveKeys, 
+        attackKeys,
+        pad1,
+        player,
+        pauseMenu,
+        spawners,
+        enemies,
+        characters,
+        map,
+        collisionLayer,
+        platforms,
+        enterDoor,
+        exitDoor,
+        poopTimer,
+        healthDisplay,
+        stomachMeter,
+        damageDisplay,
+        livesDisplay,
+        collectables,
+        checkpoints;
+
+    // Default starting properties/state of the game world. These properties
+    // can be overridden by passing a data object to the Play state.
+    var initialState,
+        defaultInitialState = {
+            map: {
+                name: 'Map1',
+                checkpoint: null
+            },
+            player: {
+                health: null,
+                maxHealth: null,
+                lives: null,
+                maxLives: null
+            }
+        };
 
     // Helper functions 
 
@@ -37,12 +101,15 @@ define([
 
     return {
         // Intro
-        init: function (mapName) {
+        init: function (data) {
+
             // Shortcut variables.
             game = this.game;
-            
-            // Set map name.
-            map = mapName || 'Map1';
+            playState = this;
+
+            // Generate initial game world state data.
+            initialState = Phaser.Utils.extend(true, {}, defaultInitialState, data);
+
         },
         
         // Main
@@ -52,9 +119,13 @@ define([
 
             // Player set-up
             player = new Player(game, 0, 0);
-            player.events.onOutOfBounds.add(this.playerOutOfBounds, this);
+            player.events.onOutOfBounds.add(this.onPlayerOutOfBounds, this);
             player.events.onDamage.add(this.onPlayerDamage);
             player.events.onHeal.add(this.onPlayerHeal);
+            player.events.onPuke.add(this.onPlayerPuke);
+            player.events.onEat.add(this.onPlayerEat);
+            player.events.onDeath.add(this.onPlayerDeath);
+            player.events.onExit.add(this.playerExits);
 
             // Make player accessible via game object.
             game.player = player;
@@ -68,7 +139,7 @@ define([
             };
 
             // Create map.
-            map = this.game.add.tilemap(map);
+            map = this.game.add.tilemap(initialState.map.name);
             
             // Add images to map.
             map.addTilesetImage('Sci-Fi-Tiles_A2', 'Sci-Fi-Tiles_A2');
@@ -92,11 +163,15 @@ define([
             // Make the collision layer globally accessiable via 'game'.
             game.collisionLayer = collisionLayer;
 
-            // Insert Commander Kavosic
-            characters = ObjectLayerHelper.createObjectsByType(game, 'commander-kavosic', map, 'characters', CommanderKavosic);
-            //characters.forEach(this.registerEnemyEvents, this);
-            game.add.existing(characters);
-            
+            // Create enter/exit doors.
+            enterDoor = ObjectLayerHelper.createObjectByName(game, 'door_enter', map, 'triggers', DutiDrop);
+            enterDoor.ruin(); // Someone made a *mess* in here...
+            game.add.existing(enterDoor);
+
+            exitDoor = ObjectLayerHelper.createObjectByName(game, 'door_exit', map, 'triggers', DutiDrop);
+            game.add.existing(exitDoor);
+            game.exitDoor = exitDoor;
+
             // Spawn point
             var spawnPoint = ObjectLayerHelper.createObjectByName(game, 'player_spawn', map, 'spawns');
 
@@ -105,15 +180,28 @@ define([
             player.x = spawnPoint.x;
             player.y = spawnPoint.y;
 
+            // Apply prior player state (if it exists).
+            player.health    = initialState.player.health ? initialState.player.health : player.health;
+            player.maxHealth = initialState.player.maxHealth ? initialState.player.maxHealth : player.maxHealth;
+            player.lives     = initialState.player.lives ? initialState.player.lives : player.lives;
+            player.maxLives  = initialState.player.maxLives ? initialState.player.maxLives : player.maxLives;
+
+            // Add checkpoints
+            checkpoints = ObjectLayerHelper.createObjectsByType(game, 'checkpoint', map, 'checkpoints', Checkpoint);
+            game.add.existing(checkpoints);
+
+            // Drop player at last checkpoint (if necessary).
+            if(initialState.map.checkpoint) {
+                player.x = initialState.map.checkpoint.x;
+                player.y = initialState.map.checkpoint.y;
+            }
+
             // Insert enemies
             enemies = [];
-            spawners = ObjectLayerHelper.createObjectsByType(game, 'spawner', map, 'spawners', Spawner);
+            spawners = new GameGroup(game);
+            spawners = ObjectLayerHelper.createObjectsByType(game, 'spawner', map, 'spawners', Spawner, spawners);
             spawners.forEach(this.registerSpawnerEvents, this);
             game.add.existing(spawners);
-
-            // Insert villagers
-            villagers = ObjectLayerHelper.createObjectsByType(game, 'villager', map, 'villagers', Villager);
-            game.add.existing(villagers);
 
             map.createLayer('foreground-decoration');
 
@@ -126,34 +214,48 @@ define([
             // Assign impasasble tiles for collision.
             map.setCollisionByExclusion([], true, 'foreground-structure');
 
-            // Create character plot triggers
-            level = new TestMap1();
-            //game.add.existing(level);
-            characterTriggers = ObjectLayerHelper.createObjectsByType(game, 'character-trigger', map, 'triggers', CharacterTrigger);
-            game.add.existing(characterTriggers);
-
-            // Create win trigger
-            exitDoor = ObjectLayerHelper.createObjectByName(game, 'door_exit', map, 'triggers');
-            game.physics.enable(exitDoor);
-            exitDoor.body.allowGravity = false;
-            exitDoor.body.immovable = true;
-            game.add.existing(exitDoor);
-
             // Platforms
-            platforms = ObjectLayerHelper.createObjectsByType(game, 'platform', map, 'platforms', Platform);
+            platforms = new GameGroup(game);
+            platforms = ObjectLayerHelper.createObjectsByType(game, 'platform', map, 'platforms', Platform, platforms);
             game.add.existing(platforms);
             platforms.callAll('start');
 
             // Collectables
-            collectables = ObjectLayerHelper.createObjectsByType(game, 'health-powerup', map, 'collectables', HealthPowerup);
+            collectables = new GameGroup(game);
+            collectables = ObjectLayerHelper.createObjectsByType(game, 'health-powerup', map, 'collectables', HealthPowerup, collectables);
+            ObjectLayerHelper.createObjectsByType(game, 'food-powerup', map, 'collectables', FoodPowerup, collectables);
             game.add.existing(collectables);
             
             // HUD
+            poopTimer = new PoopTimer(game, map.properties.timer);
+            game.add.existing(poopTimer);
+            poopTimer.events.onTick.add(this.onPoopTimerTick, this);
+            poopTimer.events.onTimeout.add(this.onPoopTimerTimeout, this);
+            
+            damageDisplay = new DamageDisplay(game, 0, 0);
+            game.add.existing(damageDisplay);
+            damageDisplay.setMaxHealth(player.maxHealth);
+            damageDisplay.updateDisplay(player.health);
+
             healthDisplay = new HealthDisplay(game, 10, 10, 'health-bar-cap-left', 'health-bar-middle', 'health-bar-cap-right', 'health-bar-fill');
             game.add.existing(healthDisplay);
             healthDisplay.setMaxHealth(player.maxHealth);
             healthDisplay.updateDisplay(player.health);
+            
+            stomachMeter = new StomachMeter(game, 0, 0);
+            game.add.existing(stomachMeter);
+            stomachMeter.updateDisplay(player.fullness / player.maxFullness);
 
+            livesDisplay = new LivesDisplay(game, 20, 20, 'life', 'empty-life');
+            game.add.existing(livesDisplay);
+            livesDisplay.updateDisplay(player.lives, player.maxLives);
+
+            // Pause Menu
+            pauseMenu = new PauseMenu(game);
+            game.add.existing(pauseMenu);
+            // Disable pauseMenu by default.
+            pauseMenu.disable();
+            
             // Keyboard input set-up
             moveKeys = game.input.keyboard.createCursorKeys();
             moveKeys.wasd = {
@@ -163,21 +265,34 @@ define([
                 right: game.input.keyboard.addKey(Phaser.Keyboard.D)
             };
             moveKeys.wasd.up.onDown.add(function () {
-                // As long as the player isn't intentionally attempting to fall
-                // through a platform, attempt to jump.
-                if(!keyboardJumpAndDownPressed()) player.jump();
+                // Direct input to player if not paused.
+                if (!player.paused) {
+                    // As long as the player isn't intentionally attempting to fall
+                    // through a platform, attempt to jump.
+                    if(!keyboardJumpAndDownPressed()) player.jump();
+                }
             });
             moveKeys.wasd.up.onUp.add(function () {
-                player.endJump();
+                // Direct input to player if not paused.
+                if (!player.paused) {
+                    player.endJump();
+                }
             });
-            game.input.keyboard.addKey(Phaser.Keyboard.COMMA).onDown.add(function () {
-                player.attackSword();
+            attackKeys = {
+                puker: game.input.keyboard.addKey(Phaser.Keyboard.PERIOD),
+                claw: game.input.keyboard.addKey(Phaser.Keyboard.QUESTION_MARK)
+            };
+            attackKeys.puker.onDown.add(function () {
+                // Direct input to player if not paused.
+                if (!player.paused) {
+                    player.attackPuker();
+                }
             });
-            game.input.keyboard.addKey(Phaser.Keyboard.PERIOD).onDown.add(function () {
-                player.attackBow();
-            });
-            game.input.keyboard.addKey(Phaser.Keyboard.QUESTION_MARK).onDown.add(function () {
-                player.attackClaw();
+            attackKeys.claw.onDown.add(function () {
+                // Direct input to player if not paused.
+                if (!player.paused) {
+                    player.attackClaw();
+                }
             });
             game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(function() {
                 if(game.scale.isFullScreen) {
@@ -186,48 +301,66 @@ define([
                     game.scale.startFullScreen();
                 }
             });
-            game.input.keyboard.addKey(Phaser.Keyboard.SPACE).onDown.add(function () {
-                // Check to see if player has reached the exit door.
-                if(game.physics.arcade.overlap(player, exitDoor)) {
-                    self.playerExits();
+
+            game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(function () {
+                // Direct input to player if not paused.
+                if (!player.paused) {
+                    // Check to see if player has reached the exit door.
+                    if(game.physics.arcade.overlap(player, exitDoor)) {
+                        self.playerExits();
+                    }
                 }
             });
+
+            game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(this.togglePause);
             
             // Gamepad input setup
             game.input.gamepad.start();
             pad1 = game.input.gamepad.pad1;
             pad1.onDownCallback = function (buttonCode, value) {
-                switch (buttonCode) {
-                    case Phaser.Gamepad.XBOX360_A:
-                        // HACK: Phaser has a bug where it doesn't update button
-                        // down/up state of a button object until after it has
-                        // fired the onDownCallback.  To get around this, we
-                        // manually update the button state here.  A bug report
-                        // has been filed here: https://github.com/photonstorm/phaser/issues/2159
-                        pad1.getButton(buttonCode).start(null, value);
-
-                        // As long as the player isn't intentionally attempting 
-                        // to fall through a platform, attempt to jump.
-                        if(!gamepadJumpAndDownPressed()) player.jump();
-                        break;
-                    case Phaser.Gamepad.XBOX360_B:
-                        player.attackSword();
-                        break;
-                    case Phaser.Gamepad.XBOX360_X:
-                        player.attackBow();
-                        break;
-                    case Phaser.Gamepad.XBOX360_Y:
-                        player.attackClaw();
-                        break;
-                    case Phaser.Gamepad.XBOX360_RIGHT_BUMPER:
-                        // Check to see if player has reached the exit door.
-                        if(game.physics.arcade.overlap(player, exitDoor)) {
-                            self.playerExits();
-                        }
-                        break;
-
-                    default:
-                        break;
+                
+                // Direct input to player if not paused.
+                if (!player.paused) {
+                    switch (buttonCode) {
+                        case Phaser.Gamepad.XBOX360_A:
+                            // HACK: Phaser has a bug where it doesn't update button
+                            // down/up state of a button object until after it has
+                            // fired the onDownCallback.  To get around this, we
+                            // manually update the button state here.  A bug report
+                            // has been filed here: https://github.com/photonstorm/phaser/issues/2159
+                            pad1.getButton(buttonCode).start(null, value);
+    
+                            // As long as the player isn't intentionally attempting 
+                            // to fall through a platform, attempt to jump.
+                            if(!gamepadJumpAndDownPressed()) player.jump();
+                            break;
+                        case Phaser.Gamepad.XBOX360_X:
+                            player.attackPuker();
+                            break;
+                        case Phaser.Gamepad.XBOX360_RIGHT_BUMPER:
+                            // Check to see if player has reached the exit door.
+                            if(game.physics.arcade.overlap(player, exitDoor)) {
+                                self.playerExits();
+                            }
+                            break;
+                        case Phaser.Gamepad.XBOX360_START:
+                            playState.togglePause();
+                            break;
+    
+                        default:
+                            break;
+                    }
+                }
+                // Direct input to pauseMenu when paused.
+                else {
+                    switch (buttonCode) {
+                        case Phaser.Gamepad.XBOX360_START:
+                            playState.togglePause();
+                            break;
+    
+                        default:
+                            break;
+                    }
                 }
             };
             pad1.onUpCallback = function (buttonCode, value) {
@@ -245,66 +378,73 @@ define([
 
         },
 
-        /*
         render: function () {
-            var body = player.weapon.getCollidables();
-            if(body) game.debug.body(body);
-            enemies.forEach(function (enemy) {
+            //if(body) game.debug.body(body);
+            /*)enemies.forEach(function (enemy) {
                 if (enemy.behavior.hunter) game.debug.geom(enemy.behavior.hunter.lineHunting);
-            });
+            });*/
         },
-        */
 
         update: function () {
-            // Collide with platforms unless the user presses jump+down on the
-            // keyboard *or* the controller (but not both).
-            if(!keyboardJumpAndDownPressed() && !gamepadJumpAndDownPressed()) {
-                game.physics.arcade.collide(player, platforms);
-            }
+            // Direct input to player and do all the map and collision stuff.
+            if (!player.paused) {
 
-            // Check weapon collisions.
-            var currentWeapon;
-            for(var w=0; w<player.weapons.length; w++) {
-                currentWeapon = player.weapons[w];
+                // Collide with exit.
+                game.physics.arcade.overlap(player, exitDoor, this.playerReachesExit);
+
+                // Collide with platforms unless the user presses jump+down on the
+                // keyboard *or* the controller (but not both).
+                if(!keyboardJumpAndDownPressed() && !gamepadJumpAndDownPressed()) {
+                    game.physics.arcade.collide(player, platforms);
+                }
+    
+                // Check weapon collisions.
+                var currentWeapon;
+                for(var w=0; w<player.weapons.length; w++) {
+                    currentWeapon = player.weapons[w];
+                    
+                    // Check to see if weapons are colliding with enemies.
+                    game.physics.arcade.overlap(currentWeapon.getCollidables(), enemies, currentWeapon.onHit);
+                    // Check to see if weapons are colliding collision layer.
+                    game.physics.arcade.collide(currentWeapon.getCollidables(), collisionLayer, currentWeapon.onHitTerrain);
+                }
+    
+                // Collide player + enemies.
+                game.physics.arcade.overlap(player, enemies, this.onPlayerCollidesEnemy);
                 
-                // Check to see if weapons are colliding with enemies.
-                game.physics.arcade.overlap(currentWeapon.getCollidables(), enemies, currentWeapon.onHit);
-                game.physics.arcade.overlap(currentWeapon.getCollidables(), villagers, currentWeapon.onHit);
-                // Check to see if weapons are colliding collision layer.
-                game.physics.arcade.collide(currentWeapon.getCollidables(), collisionLayer, currentWeapon.onHitTerrain);
+                // Collide player + collectables.
+                game.physics.arcade.overlap(player, collectables, this.onPlayerCollidesCollectable);
+    
+                game.physics.arcade.overlap(player, checkpoints, this.onPlayerCollidesCheckpoint);
+    
+                // Collide objects with map.  Do this after other collision checks
+                // so objects aren't pushed through walls.
+                game.physics.arcade.collide(player, collisionLayer);
+                game.physics.arcade.collide(characters, collisionLayer);
+                game.physics.arcade.collide(enemies, collisionLayer);
+                game.physics.arcade.collide(collectables, collisionLayer);
+    
+                // Player movement controls
+                if(moveKeys.wasd.left.isDown ||
+                   pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) ||
+                   pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.6) {
+                    player.moveLeft();
+                } else if (moveKeys.wasd.right.isDown ||
+                   pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) ||
+                   pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.6) {
+                    player.moveRight();
+                } else {
+                    player.stopMoving();
+                }
+                
+                if (attackKeys.puker.isDown ||
+                    pad1.isDown(Phaser.Gamepad.XBOX360_X)) {
+                    player.attackPuker();
+                }
             }
-
-            // Check to see if weapons are colliding with collectables.
-            game.physics.arcade.overlap(player.weapons.clawArm.getCollidables(), collectables, currentWeapon.onHit);
-
-            // Collide player + enemies.
-            game.physics.arcade.overlap(player, enemies, this.onPlayerCollidesEnemy);
-            
-            // Check overlap of player + character triggers.
-            game.physics.arcade.overlap(player, characterTriggers, this.onPlayerOverlapCharacterTrigger);
-            
-            // Collide player + collectables.
-            game.physics.arcade.overlap(player, collectables, this.onPlayerCollidesCollectable);
-
-            // Collide objects with map.  Do this after other collision checks
-            // so objects aren't pushed through walls.
-            game.physics.arcade.collide(player, collisionLayer);
-            game.physics.arcade.collide(characters, collisionLayer);
-            game.physics.arcade.collide(enemies, collisionLayer);
-            game.physics.arcade.collide(villagers, collisionLayer);
-            game.physics.arcade.collide(collectables, collisionLayer);
-
-            // Player movement controls
-            if(moveKeys.wasd.left.isDown ||
-               pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) ||
-               pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.6) {
-                player.moveLeft();
-            } else if (moveKeys.wasd.right.isDown ||
-               pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) ||
-               pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.6) {
-                player.moveRight();
-            } else {
-                player.stopMoving();
+            // Direct input to PauseMenu when paused.
+            else {
+                
             }
         },
 
@@ -312,6 +452,36 @@ define([
             // This prevents occasional momentary "flashes" during state transitions.
             game.camera.unfollow();
             pad1.onDownCallback = undefined;
+        },
+
+        togglePause: function () {
+            if(player.paused) {
+                player.paused = false;
+                collectables.paused = false;
+                platforms.paused = false;
+                poopTimer.paused = false;
+                
+                // This is dumb. Enemies should just be a GameGroup, but I'm lazy.
+                for (var lcv = 0; lcv < enemies.length; lcv++) {
+                    enemies[lcv].paused = false;
+                }
+                
+                // Disable pauseMenu.
+                pauseMenu.disable();
+            } else {
+                player.paused = true;
+                collectables.paused = true;
+                platforms.paused = true;
+                poopTimer.paused = true;
+                
+                // This is dumb. Enemies should just be a GameGroup, but I'm lazy.
+                for (var lcv = 0; lcv < enemies.length; lcv++) {
+                    enemies[lcv].paused = true;
+                }
+                
+                // Enable pauseMenu.
+                pauseMenu.enable();
+            }
         },
         
         registerSpawnerEvents: function (spawner) {
@@ -327,24 +497,20 @@ define([
             if (enemy.events.onSpawnChild) enemy.events.onSpawnChild.add(this.onSpawnerSpawn, this);
         },
         
-        registerVillagerEvents: function (villager) {
-            villager.events.onDeath.add(this.onVillagerDeath, this);
-        },
-        
-        onPlayerOverlapCharacterTrigger: function (player, characterTrigger) {
-            characters.forEach( function(character) {
-                if (character.name === characterTrigger.properties.characterTriggerTarget) {
-                    level.handleTrigger(character, characterTrigger.properties.key, characterTrigger.properties);
-                }
-            });
-        },
-        
         onSpawnerSpawn: function(spawner, sprite) {
             this.registerEnemyEvents(sprite);
         },
         
         onPlayerCollidesEnemy: function (player, enemy) {
-            if(!enemy.invulnerable && !enemy.dying) player.damage(4, enemy);
+            if(!enemy.invulnerable && !enemy.dying) {
+                // Enemies don't do lethal damage; just knockback.
+                player.damage(0, enemy);
+            }
+        },
+
+        onPlayerCollidesCheckpoint: function (player, checkpoint) {
+            console.log('colliding checkpoint');
+            initialState.map.checkpoint = checkpoint;
         },
         
         onEnemyDeath: function (enemy) {},
@@ -352,8 +518,6 @@ define([
         onEnemyDrop: function (enemy, item) {
             collectables.add(item);
         },
-        
-        onVillagerDeath: function (villager) {},
 
         onPlayerDamage: function (totalHealth, amount) {
             console.log('health: ', totalHealth);
@@ -361,11 +525,8 @@ define([
             // Update HUD
             healthDisplay.updateDisplay(player.health);
 
-            // Is the player dead?
-            if(totalHealth <= 0) {
-                game.camera.unfollow();
-                game.stateTransition.to('Die', true);
-            }
+            // Update damage display.
+            damageDisplay.updateDisplay(player.health);
         },
 
         onPlayerHeal: function (totalHealth, amount) {
@@ -373,6 +534,46 @@ define([
 
             // Update HUD
             healthDisplay.updateDisplay(player.health);
+            damageDisplay.updateDisplay(player.health);
+        },
+        
+        onPlayerPuke: function () {
+            // Update HUD
+            stomachMeter.updateDisplay(player.fullness / player.maxFullness);
+        },
+        
+        onPlayerEat: function () {
+            // Update HUD
+            stomachMeter.updateDisplay(player.fullness / player.maxFullness);
+        },
+
+        onPlayerDeath: function (player) {
+            game.camera.unfollow();
+
+            // Player has more lives and will get another chance!
+            if(player.lives > 1) {
+                // Decrement player lives.
+                player.removeLife();
+
+                game.stateTransition.to('Die', true, false, {
+                    map: {
+                        name: initialState.map.name,
+                        checkpoint: initialState.map.checkpoint
+                    },
+                    player: {
+                        // Start w/ maximum health
+                        health: player.maxHealth,
+                        maxHealth: player.maxHealth,
+                        lives: player.lives,
+                        maxLives: player.maxLives
+                    }
+                });
+            }
+
+            // Player has no more lives left :(.  Game over.
+            else {
+                game.stateTransition.to('GameOver', true, false);
+            }
         },
             
         onPlayerCollidesCollectable: function (player, collectable) {
@@ -380,14 +581,52 @@ define([
             collectable.destroy();
         },
         
-        playerOutOfBounds: function() {
-            // Switch to the "death" state.
-            game.stateTransition.to('Die', true);
+        onPlayerOutOfBounds: function() {
+            game.camera.unfollow();
+        },
+
+        playerReachesExit: function () {
+            exitDoor.open();
+            player.exitLevel();
+        },
+        
+        onPoopTimerTick: function(seconds, maxSeconds) {
+            if (game.rnd.frac() > 0.9) {
+                
+                if (seconds < 10) {
+                    // 3rd tier if under 10 seconds.
+                    player.showDialog(3); 
+                }
+                else if (seconds / maxSeconds < 0.5) {
+                    // 2nd tier if under half of max time.
+                    player.showDialog(2); 
+                }
+                else {
+                    // 1st tier if over half of max time.
+                    player.showDialog(1); 
+                }
+            }
+        },
+        
+        onPoopTimerTimeout: function() {
+            player.damage(1, poopTimer);
         },
 
         playerExits: function () {
             // Switch to the "win" state.
-            game.stateTransition.to('Play', true, false, exitDoor.properties.mapLink);
+            game.camera.unfollow();
+            game.stateTransition.to('Play', true, false, {
+                map: {
+                    name: exitDoor.properties.mapLink
+                },
+                player: {
+                    // Start w/ same health on next map as player has now.
+                    health: player.health,
+                    maxHealth: player.maxHealth,
+                    lives: player.lives,
+                    maxLives: player.maxLives
+                }
+            });
         }
     };
 });

@@ -185,7 +185,7 @@ define([
             self.claw.body.checkCollision.right = true;
             self.claw.reset(self.parent.x, self.parent.y);
             game.world.bringToTop(self.claw);
-            self.claw.fire(self.parent.facing);
+            self.claw.fire(self.parent.scale.x);
         }
     };
     

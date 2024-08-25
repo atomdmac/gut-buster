@@ -10,6 +10,11 @@ define([
         game = _game;
 
         Weapon.call(this, game, x, y, 'sword-swipe');
+        game.physics.enable(this);
+        this.body.allowGravity = false;
+        this.body.moves = false;
+        this.body.immovable = true;
+
         anim = this.animations.add('swipe', null, 60);
         anim.onComplete.add(onAttackFinish, this);
         this.anchor.y = 0.5;
@@ -79,25 +84,25 @@ define([
 
     function makeLeftHitboxFrames (hitboxes) {
 
-        var box0 = hitboxes.create(0,0,null);
+        var box0 = hitboxes.create(0,0,'blank');
         box0.body.setSize(32, 32, -16, -48);
 
-        var box1 = hitboxes.create(0,0,null);
+        var box1 = hitboxes.create(0,0,'blank');
         box1.body.setSize(32, 32, -32, -48);
 
-        var box2 = hitboxes.create(0,0,null);
+        var box2 = hitboxes.create(0,0,'blank');
         box2.body.setSize(32, 48, -48, -48);
 
-        var box3 = hitboxes.create(0,0,null);
+        var box3 = hitboxes.create(0,0,'blank');
         box3.body.setSize(32, 64, -48, -48);
 
-        var box4 = hitboxes.create(0,0,null);
+        var box4 = hitboxes.create(0,0,'blank');
         box4.body.setSize(32, 64, -48, -32);
 
-        var box5 = hitboxes.create(0,0,null);
+        var box5 = hitboxes.create(0,0,'blank');
         box5.body.setSize(32, 80, -48, -31);
 
-        var box6 = hitboxes.create(0,0,null);
+        var box6 = hitboxes.create(0,0,'blank');
         box6.body.setSize(48, 32, -48, 16);
 
         // Remember: frame keys here are 0 indexed.
@@ -118,8 +123,9 @@ define([
 
     Sword.prototype.getCollidables = function () {
         if(!this.inUse) return null;
+
         var hitbox;
-        if(this.parent.facing == 'right') {
+        if(this.parent.scale.x > 0) {
             hitbox = this.rightHitboxFrames[anim.currentFrame.index];
         } else {
             hitbox = this.leftHitboxFrames[anim.currentFrame.index];
@@ -135,7 +141,11 @@ define([
     }
 
     Sword.prototype.update = function () {
-        Phaser.Sprite.prototype.update.call(this);
+        // Hide sword when it's not in use.
+        if(anim.isPlaying) this.visible = true;
+        else this.visible = false;
+
+        Weapon.prototype.update.call(this);
     };
 
     Sword.prototype.revive = function (health) {
